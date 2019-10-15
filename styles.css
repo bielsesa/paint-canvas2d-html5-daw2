@@ -1,3 +1,59 @@
+@import url('https://fonts.googleapis.com/css?family=Lato|Montserrat|Nunito&display=swap');
+
+* {
+    background: #f1d4d4;
+}
+
+body {
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+}
+
+/* INDEX */
+
+h1 {
+    color: #484c7f;
+    margin: 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 3em;
+    font-weight: 800;
+    text-align: center;
+}
+
+h3 {
+    color: #2c2f4e;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    text-align: center;
+}
+
+#contingut {
+    background: #f7eaea;
+    border-radius: 10px;
+    margin: 5px 100px;
+    position: absolute;
+    text-align: justify;
+    text-justify: auto;
+}
+
+#contingut p, form {
+    background: transparent;
+    padding: 1em;
+}
+
+footer {
+    color: #715a7a;
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+/* INDEX */
+
+
+/*  CANVAS  */
+
 #paint {
     border: solid 2px black;
     height: 500px;
@@ -7,9 +63,13 @@
     width: 1250px;
 }
 
+#area-dibuix {
+    background: white;
+}
+
 button {
     top: 15px;
-    width: 80px;
+    width: 80px;    
 }
 
 #opcions-dibuix {
@@ -17,3 +77,5 @@ button {
     border: solid 1px black;
     width: 164px;
 }
+
+/*  CANVAS  */

@@ -1,0 +1,30 @@
+#paint {
+    border: solid 2px black;
+    height: 500px;
+    top: 15px;
+    left: 250px;
+    position: absolute;
+    width: 1250px;
+}
+
+/*
+#area-dibuix {
+    border: solid 2px black;
+    height: 500px;
+    top: 15px;
+    left: 250px;
+    position: absolute;
+    width: 1250px;
+}
+*/
+
+button {
+    top: 15px;
+    width: 80px;
+}
+
+#opcions-dibuix {
+    float: left;
+    border: solid 1px black;
+    width: 164px;
+}

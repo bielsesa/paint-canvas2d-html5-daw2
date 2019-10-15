@@ -9,6 +9,40 @@ body {
     font-family: 'Lato', sans-serif;
 }
 
+#contingut {
+    background: #f7eaea;
+    border-radius: 10px;
+    margin: 5px 100px;
+    padding: 10px;
+}
+
+nav {
+    background: #484c7f;
+    border-radius: 5px;
+    color: #f1d4d4;
+    position: fixed;
+    top: 5px;    
+    font-family: 'Montserrat', sans-serif;    
+    margin: 1em;
+}
+
+nav a {    
+    background: transparent;
+    border: solid 2px white;
+    color: #f1d4d4;
+    display: block;
+    padding: 10px;
+    margin: 5px;
+}
+
+nav a:link {
+    text-decoration: none;
+}
+
+nav a:active {
+    color: #b599c2;
+}
+
 /* INDEX */
 
 h1 {
@@ -27,40 +61,33 @@ h3 {
     text-align: center;
 }
 
-#contingut {
-    background: #f7eaea;
-    border-radius: 10px;
-    margin: 5px 100px;
-    position: absolute;
+#contingut p, form {
+    background: transparent;
+    padding: 1em;
     text-align: justify;
     text-justify: auto;
 }
 
-#contingut p, form {
-    background: transparent;
-    padding: 1em;
-}
-
 footer {
+    background: transparent;
     color: #715a7a;
     position: absolute;
-    bottom: 10px;
+    bottom: 5px;
     text-align: center;
     width: 100%;
 }
 
 /* INDEX */
 
-
 /*  CANVAS  */
 
 #paint {
+    background: transparent;
     border: solid 2px black;
-    height: 500px;
-    top: 15px;
-    left: 250px;
-    position: absolute;
-    width: 1250px;
+    height: 400px;
+    position: relative;
+    left: 200px;
+    width: 900px;
 }
 
 #area-dibuix {

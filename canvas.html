@@ -13,33 +13,31 @@
         <h1>Aplicació Paint amb Canvas 2D</h1>
         <h3>Projecte de HTML5 de DAW2</h4>
     </header>
-    <nav>
-        <a id="nav-home" href="index.html">Home</a>
-        <a id="nav-canvas" href="canvas.html">LET'S GET TO IT</a>
-    </nav>
     <div id="contingut">
-        <div id="opcions-dibuix">
-            <button id="btn-pincell">Pincell</button>
-            <button id="btn-cercle">Cercle</button>
-            <button id="btn-rectangle">Rectangle</button>
-            <button id="btn-triangle">Triangle</button>
-            <button id="btn-forma-lliure">Forma lliure</button>
-            <button id="btn-text">Text</button>
-            <button id="btn-guardar">Guardar com...</button>
-            <button id="btn-neteja">Neteja</button>
-            <input type="color" id="btn-color-pick" placeholder="#000" />
+        <nav>
+            <a id="nav-home" href="index.html">Home</a>
+            <a id="nav-canvas" href="canvas.html">LET'S GET TO IT</a>
+        </nav>
+        <div id="aplicacio">
+            <div id="opcions-eines">
+                <button id="btn-pincell">Pincell</button>
+                <button id="btn-cercle">Cercle</button>
+                <button id="btn-rectangle">Rectangle</button>
+                <button id="btn-triangle">Triangle</button>
+                <button id="btn-forma-lliure">Forma lliure</button>
+                <button id="btn-text">Text</button>
+                <button id="btn-guardar">Guardar com...</button>
+                <button id="btn-neteja">Neteja</button>
+                <input type="color" id="btn-color-pick" placeholder="#000" />
+            </div>
+            <div id="paint">
+                <canvas id="area-dibuix"></canvas>
+            </div>
         </div>
-        <div id="paint">
-            <canvas id="area-dibuix"></canvas>
-        </div>
-    </div>
+    </div>    
     <footer>
         Biel Serrano Sánchez, Escola Jesuïtes El Clot DAW2, 2019
     </footer>
-
-
-
-    <div id="opcions-eina"></div>
 </body>
 
 </html>

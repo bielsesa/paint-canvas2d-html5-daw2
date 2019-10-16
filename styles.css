@@ -10,20 +10,17 @@ body {
 }
 
 #contingut {
-    background: #f7eaea;
-    border-radius: 10px;
-    margin: 5px 100px;
-    padding: 10px;
+    display: inline;
 }
 
 nav {
     background: #484c7f;
     border-radius: 5px;
     color: #f1d4d4;
-    position: fixed;
-    top: 5px;    
-    font-family: 'Montserrat', sans-serif;    
+    float: left;
+    font-family: 'Montserrat', sans-serif;
     margin: 1em;
+    top: 5px;      
 }
 
 nav a {    
@@ -43,7 +40,22 @@ nav a:active {
     color: #b599c2;
 }
 
-/* INDEX */
+/******* INDEX *******/
+
+#informacio {
+    background: #f7eaea;
+    border-radius: 10px;
+    float: left;
+    margin: 10px;
+    position: relative;  
+    width: 1200px;
+}
+
+#informacio p {
+    background: transparent;
+    padding: 10px;
+    text-align: justify;
+}
 
 h1 {
     color: #484c7f;
@@ -61,13 +73,6 @@ h3 {
     text-align: center;
 }
 
-#contingut p, form {
-    background: transparent;
-    padding: 1em;
-    text-align: justify;
-    text-justify: auto;
-}
-
 footer {
     background: transparent;
     color: #715a7a;
@@ -77,32 +82,37 @@ footer {
     width: 100%;
 }
 
-/* INDEX */
+/******* INDEX *******/
 
-/*  CANVAS  */
+/*****  CANVAS  *****/
 
 #paint {
     background: transparent;
     border: solid 2px black;
-    height: 400px;
+    float: left;
+    height: 500px;
+    margin: 10px;
     position: relative;
-    left: 200px;
     width: 900px;
 }
 
-#area-dibuix {
+#paint canvas {
     background: white;
+    left: 0;
+    position: absolute;
+    top: 0;
 }
 
-button {
+#aplicacio button {
     top: 15px;
-    width: 80px;    
+    width: 80px;
 }
 
-#opcions-dibuix {
-    float: left;
+#opcions-eines {
     border: solid 1px black;
+    float: left;
+    margin: 10px;
     width: 164px;
 }
 
-/*  CANVAS  */
+/*****  CANVAS  *****/

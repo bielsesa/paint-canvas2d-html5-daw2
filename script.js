@@ -10,19 +10,25 @@ window.addEventListener('load', () => {
     let canvas = document.getElementById('area-dibuix');
     let ctx = canvas.getContext('2d');
 
+    // recull el div contenidor dels canvas per calcular la mida
+    // dels canvas
+    // getComputedStyle recull les característiques del div (alçada, amplada)
+    let painting = document.getElementById('paint');
+    let paintStyle = getComputedStyle(painting);
+
     // valors per defecte pel tipus de traç
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 3;
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
 
-    let painting = document.getElementById('paint');
-    let paint_style = getComputedStyle(painting);
-    canvas.width = parseInt(paint_style.getPropertyValue('width'));
-    canvas.height = parseInt(paint_style.getPropertyValue('height'));
+    // s'assignen els valors d'alçada i amplada
+    canvas.width = parseInt(paintStyle.getPropertyValue('width'));
+    canvas.height = parseInt(paintStyle.getPropertyValue('height'));
 
     // variable que recull les coordinades del ratolí
     let mouse = { x: 0, y: 0 };
+    let startMouse = { x: 0, y: 0 };
 
     // funcions
 
@@ -41,6 +47,8 @@ window.addEventListener('load', () => {
         ctx.stroke();
     };
 
+    /************ FUNCIONS EINES ************/
+
     let einaPincell = () => {
         // event mousemove per pintar amb el pincell només mentre es mou el cursor
         canvas.addEventListener('mousemove', (e) => getCursorPosition(), false);
@@ -57,8 +65,24 @@ window.addEventListener('load', () => {
         }, false);
     };
 
-    let einaCercle = () => {
+    let einaLinia = () => {
+        let startMouse = { x: 0, y: 0 };
+        canvas.addEventListener('mousedown', (e) => {
+            mouse.x = typeof e.offsetX !== 'undefined' ? e.offsetX : e.layerX;
+            mouse.y = typeof e.offsetY !== 'undefined' ? e.offsetY : e.layerY;
 
+            startMouse.x = mouse.x;
+            startMouse.y = mouse.y;
+
+            ctx.beginPath();
+            ctx.moveTo(startMouse.x, startMouse.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.stroke();
+            ctx.closePath();
+        }, false);
+    };
+
+    let einaCercle = () => {
         canvas.addEventListener('mousedown', (e) => {
             getCursorPosition();
             ctx.beginPath();
@@ -76,18 +100,21 @@ window.addEventListener('load', () => {
         }, false);
     };
 
-    let netejaCanvas = () => {        
+    let netejaCanvas = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
 
+    /************ FUNCIONS EINES ************/
+
     // assignació de event listeners per les eines
     document.getElementById('btn-pincell').addEventListener('click', einaPincell);
+    document.getElementById('btn-linia').addEventListener('click', einaLinia);
     document.getElementById('btn-cercle').addEventListener('click', einaCercle);
     document.getElementById('btn-rectangle').addEventListener('click', einaRectangle);
     document.getElementById('btn-color-pick').addEventListener('change', canviaColor);
     document.getElementById('btn-neteja').addEventListener('click', netejaCanvas);
 
-    // simula un click al botó del pincell perquè és l'eina per defecte
+    // per últim simula un click al botó del pincell perquè és l'eina per defecte
     document.getElementById('btn-pincell').click();
 }, true);
 

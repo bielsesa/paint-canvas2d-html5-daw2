@@ -29,6 +29,7 @@ window.addEventListener('load', () => {
     // variable que recull les coordinades del ratolí
     let mouse = { x: 0, y: 0 };
     let startMouse = { x: 0, y: 0 };
+    let lastMouse = { x: 0, y: 0 };
     let puntsCursor = [];
 
     // l'eina per defecte és el pincell
@@ -142,13 +143,31 @@ window.addEventListener('load', () => {
         // i després la coordinada fins on es fa el drag
         // finalment pinta la linia
 
+        // pq es vegi el recorregut:
+        // EN EVENT MOUSEMOVE
+        // comprovar diferència entre mouse.x/mouse.y i lastMouse.x/lastMouse.y
+        // si es diferent, esborrar últim traç 
+        // dibuixar un nou traç
+        // guardar les noves coords a lastMouse
+
+        // S'HAURIA DE FER AMB UN CANVAS TEMPORAL!! ^^^^^
+        // pq aixi cada cop que canvien les lastmouse i mouse coords
+        // es neteja tot el canvas temp i es redibuixa
+        // sense que afecti el canvas principal
+
         let pintaLinia = () => {
             obtenirPosicioCursorAmbStartMouse();
             ctx.beginPath();
             ctx.moveTo(startMouse.x, startMouse.y);
         };
 
+        let arrossegaLinia = () => {
+            obtenirPosicioCursor();
+            // pintar al canvas temporal
+        };
+
         canvas.addEventListener('mousedown', pintaLinia, false);
+        canvas.addEventListener('mousemove');
         canvas.addEventListener('mouseup', (e) => {
             canvas.removeEventListener('mousedown', pintaLinia, false);
             obtenirPosicioCursor();

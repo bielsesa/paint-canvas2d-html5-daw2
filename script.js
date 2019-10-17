@@ -49,7 +49,7 @@ window.addEventListener('load', () => {
         canvas.addEventListener('mousemove', onPaint, false);
 
         obtenirPosicioCursor();
-        if (tool == 'brush' || tool == 'line') {
+        if (tool == 'brush') {
             ctx.beginPath();
             ctx.moveTo(mouse.x, mouse.y);
         }
@@ -80,10 +80,8 @@ window.addEventListener('load', () => {
         mouse.x = event.clientX - rect.left;
         mouse.y = event.clientY - rect.top;
 
-        if (tool == 'line') {
-            startMouse.x = mouse.x;
-            startMouse.y = mouse.y;
-        }
+        startMouse.x = mouse.x;
+        startMouse.y = mouse.y;
     };
 
     let canviaColor = () => {
@@ -144,8 +142,10 @@ window.addEventListener('load', () => {
 
         let pintaLinia = () => {
             obtenirPosicioCursorAmbStartMouse();
-            ctx.beginPath();
-            ctx.moveTo(startMouse.x, startMouse.y);
+            tmpCtx.beginPath();
+            tmpCtx.moveTo(startMouse.x, startMouse.y);
+            lastMouse.x = startMouse.x;
+            lastMouse.y = startMouse.y;
         };
 
         let arrossegaLinia = () => {
@@ -153,7 +153,7 @@ window.addEventListener('load', () => {
             // pintar al canvas temporal
             if (mouse.x !== lastMouse.x && mouse.y !== lastMouse.y) {
                 tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
-                ctx.moveTo(startMouse.x, startMouse.y);
+                tmpCtx.moveTo(startMouse.x, startMouse.y);
                 tmpCtx.lineTo(mouse.x, mouse.y);
                 tmpCtx.stroke();
 
@@ -166,7 +166,7 @@ window.addEventListener('load', () => {
         canvas.addEventListener('mousemove', arrossegaLinia, false);
         canvas.addEventListener('mouseup', (e) => {
             canvas.removeEventListener('mousedown', pintaLinia, false);
-            canvas.removeEventListener('mousemove', arrossegaLinia, false);     
+            canvas.removeEventListener('mousemove', arrossegaLinia, false);
             ctx.drawImage(tmpCanvas, 0, 0);
             tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
         }, false);

@@ -49,7 +49,7 @@ window.addEventListener('load', () => {
         canvas.addEventListener('mousemove', onPaint, false);
 
         obtenirPosicioCursor();
-        if (tool == 'brush') {
+        if (tool == 'brush' || tool == 'eraser') {
             ctx.beginPath();
             ctx.moveTo(mouse.x, mouse.y);
         }
@@ -100,6 +100,7 @@ window.addEventListener('load', () => {
 
     /************ FUNCIONS EINES ************/
 
+    // PINCELL
     let onPaintBrush = () => {
         console.log('onPaintBrush');
         console.log(`coords: ${mouse.x} , ${mouse.y}`);
@@ -107,22 +108,7 @@ window.addEventListener('load', () => {
         ctx.stroke();
     };
 
-    let onPaintCircle = () => {
-        console.log('onPaintCircle');
-        console.log(`coords: ${mouse.x} , ${mouse.y}`);
-
-        let pintaCercle = () => {
-            ctx.arc(mouse.x, mouse.y, 50, 0, 2 * Math.PI);
-            ctx.stroke();
-        };
-
-        canvas.addEventListener('mousedown', pintaCercle, false);
-
-        canvas.addEventListener('mouseup', () => {
-            canvas.removeEventListener('mousedown', pintaCercle, false);
-        }, false);
-    };
-
+    // LINIA
     let onPaintLine = () => {
         // agafa la coordinada inicial
         // i després la coordinada fins on es fa el drag
@@ -172,17 +158,54 @@ window.addEventListener('load', () => {
         }, false);
     };
 
-    let einaRectangle = () => {
-        canvas.addEventListener('mousedown', (e) => {
-            obtenirPosicioCursor();
-            ctx.beginPath();
-            ctx.rect(mouse.x, mouse.y, 150, 100);
+    // CERCLE
+    let onPaintCircle = () => {
+        console.log('onPaintCircle');
+        console.log(`coords: ${mouse.x} , ${mouse.y}`);
+
+        let pintaCercle = () => {
+            ctx.arc(mouse.x, mouse.y, 50, 0, 2 * Math.PI);
             ctx.stroke();
+        };
+
+        canvas.addEventListener('mousedown', pintaCercle, false);
+
+        canvas.addEventListener('mouseup', () => {
+            canvas.removeEventListener('mousedown', pintaCercle, false);
         }, false);
     };
 
+    // RECTANGLE
+    let onPaintRect = () => {
+        console.log('onPaintRect');
+        console.log(`coords: ${mouse.x} , ${mouse.y}`);
+
+        let pintaRectangle = () => {
+            ctx.rect(mouse.x, mouse.y, 150, 100);
+            ctx.stroke();
+        };
+
+        canvas.addEventListener('mousedown', pintaRectangle, false);
+
+        canvas.addEventListener('mouseup', () => {
+            canvas.removeEventListener('mousedown', pintaRectangle, false);
+        }, false);
+    };
+
+    // NETEJA EL CANVAS COMPLET
     let netejaCanvas = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+    };
+
+    // GOMA D'ESBORRAR
+    let onErase = () => {
+        console.log('onErase');
+        console.log(`coords: ${mouse.x} , ${mouse.y}`);
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'rgba(0,0,0,1)';   // QUAN SURT DE LA GOMA HA DE CANVIAR DE NOU EL STROKE/FILL STYLE PERQUÈ SI NO NO PINTARÀ RES!
+        ctx.strokeStyle = 'rgba(0,0,0,1)';
+        ctx.lineTo(mouse.x, mouse.y);
+        ctx.stroke();
     };
 
     /************ FUNCIONS EINES ************/
@@ -191,7 +214,8 @@ window.addEventListener('load', () => {
     document.getElementById('btn-pincell').addEventListener('click', () => tool = 'brush');
     document.getElementById('btn-linia').addEventListener('click', () => tool = 'line');
     document.getElementById('btn-cercle').addEventListener('click', () => tool = 'circle');
-    document.getElementById('btn-rectangle').addEventListener('click', einaRectangle);
+    document.getElementById('btn-rectangle').addEventListener('click', () => tool = 'rectangle');
     document.getElementById('btn-color-pick').addEventListener('change', canviaColor);
     document.getElementById('btn-neteja').addEventListener('click', netejaCanvas);
+    document.getElementById('btn-goma').addEventListener('click', () => tool = 'eraser');
 }, true);

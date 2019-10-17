@@ -31,6 +31,7 @@ window.addEventListener('load', () => {
     let startMouse = { x: 0, y: 0 };
     let puntsCursor = [];
 
+    // l'eina per defecte és el pincell
     let tool = 'brush';
 
     canvas.addEventListener('mousedown', (e) => {
@@ -57,11 +58,19 @@ window.addEventListener('load', () => {
         mouse.x = event.clientX - rect.left;
         mouse.y = event.clientY - rect.top;
 
-        startMouse.x = mouse.x;
-        startMouse.y = mouse.y;
-
         puntsCursor.push({ x: mouse.x, y: mouse.y });
         console.log('obtenirPosicioCursor');
+    };
+
+    let obtenirPosicioCursorAmbStartMouse = () => {
+        let rect = canvas.getBoundingClientRect();
+        mouse.x = event.clientX - rect.left;
+        mouse.y = event.clientY - rect.top;     
+
+        if (tool == 'line') {
+            startMouse.x = mouse.x;
+            startMouse.y = mouse.y;
+        }   
     };
 
     let canviaColor = () => {
@@ -77,11 +86,11 @@ window.addEventListener('load', () => {
         console.log('onPaint');
         if (tool == 'brush') { onPaintBrush(); }
         else if (tool == 'circle') { onPaintCircle(); }
-        /*else if (tool == 'line') { onPaintLine(); }
+        else if (tool == 'line') { onPaintLine(); }
         else if (tool == 'rectangle') { onPaintRect(); }
         else if (tool == 'ellipse') { drawEllipse(tmp_ctx); }
         else if (tool == 'eraser') { onErase(); }
-        else if (tool == 'spray') { generateSprayParticles(); }*/
+        else if (tool == 'spray') { generateSprayParticles(); }
     };
 
     /************ FUNCIONS EINES ************/
@@ -97,15 +106,15 @@ window.addEventListener('load', () => {
         console.log('onPaintCircle');
         console.log(`coords: ${mouse.x} , ${mouse.y}`);
 
-        let paintCircle = (e) => {
+        let pintaCercle = () => {
             ctx.arc(mouse.x, mouse.y, 50, 0, 2 * Math.PI);
             ctx.stroke();
         };
 
-        canvas.addEventListener('mousedown', paintCircle, false);
+        canvas.addEventListener('mousedown', pintaCercle, false);
 
-        canvas.addEventListener('mouseup', (e) => {
-            canvas.removeEventListener('mousedown', paintCircle, false);
+        canvas.addEventListener('mouseup', () => {
+            canvas.removeEventListener('mousedown', pintaCercle, false);
         }, false);
 
         /*
@@ -128,19 +137,23 @@ window.addEventListener('load', () => {
         */
     };
 
-    let einaPincell = () => {
-        // event mousemove per pintar amb el pincell només mentre es mou el cursor
-        canvas.addEventListener('mousemove', (e) => obtenirPosicioCursor(), false);
+    let onPaintLine = () => {
+        // agafa la coordinada inicial
+        // i després la coordinada fins on es fa el drag
+        // finalment pinta la linia
 
-        canvas.addEventListener('mousedown', (e) => {
+        let pintaLinia = () => {
+            obtenirPosicioCursorAmbStartMouse();
             ctx.beginPath();
-            ctx.moveTo(mouse.x, mouse.y);
+            ctx.moveTo(startMouse.x, startMouse.y);
+        };
 
-            canvas.addEventListener('mousemove', pintaPunt, false);
-        }, false);
-
-        canvas.addEventListener('mouseup', () => {
-            canvas.removeEventListener('mousemove', pintaPunt, false);
+        canvas.addEventListener('mousedown', pintaLinia, false);
+        canvas.addEventListener('mouseup', (e) => {
+            canvas.removeEventListener('mousedown', pintaLinia, false);
+            obtenirPosicioCursor();
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.stroke();
         }, false);
     };
 
@@ -186,13 +199,10 @@ window.addEventListener('load', () => {
 
     // assignació de event listeners per les eines
     document.getElementById('btn-pincell').addEventListener('click', () => tool = 'brush');
-    document.getElementById('btn-linia').addEventListener('click', einaLinia);
+    document.getElementById('btn-linia').addEventListener('click', () => tool = 'line');
     document.getElementById('btn-cercle').addEventListener('click', () => tool = 'circle');
     document.getElementById('btn-rectangle').addEventListener('click', einaRectangle);
     document.getElementById('btn-color-pick').addEventListener('change', canviaColor);
     document.getElementById('btn-neteja').addEventListener('click', netejaCanvas);
-
-    // per últim simula un click al botó del pincell perquè és l'eina per defecte
-    document.getElementById('btn-pincell').click();
 }, true);
 

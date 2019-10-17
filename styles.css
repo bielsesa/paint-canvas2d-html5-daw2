@@ -87,7 +87,7 @@ footer {
 /*****  CANVAS  *****/
 
 #paint {
-    background: transparent;
+    background: white;
     border: solid 2px black;
     float: left;
     height: 500px;
@@ -97,7 +97,7 @@ footer {
 }
 
 #paint canvas {
-    background: white;
+    background: transparent;
     cursor: crosshair;
     left: 0;
     position: absolute;

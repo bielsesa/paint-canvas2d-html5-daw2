@@ -51,10 +51,14 @@ nav a:active {
     width: 1200px;
 }
 
-#informacio p {
+#informacio p, h4, ul {
     background: transparent;
-    padding: 10px;
+    padding: 10px 50px;
     text-align: justify;
+}
+
+#informacio li {
+    background: transparent;
 }
 
 h1 {
@@ -110,10 +114,40 @@ footer {
 }
 
 #opcions-eines {
+    background: #f7eaea;
     border: solid 1px black;
+    border-radius: 10px;
     float: left;
     margin: 10px;
-    width: 164px;
+    padding: 5px;
+}
+
+#opcions-eina-actual {
+    background: #f7eaea;
+    border: solid 1px black;
+    border-radius: 10px;
+    float: left;
+    margin: 10px;
+    padding: 5px;
+    width: 180px;    
+}
+
+#mida-pincell {
+    margin: 5px;
+}
+
+.icon {
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+.icon:hover {
+    border: 2px solid black;
+}
+
+.icon:active {
+    border: 3px solid white;
 }
 
 /*****  CANVAS  *****/

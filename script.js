@@ -1,3 +1,17 @@
+// Biel Serrano Sánchez 
+// DAW2 Escola Jesuïtes El Clot
+// Curs 2019-20
+
+// TODO:
+/*
+    - Assegurar-se de que el color escollit a l'hora d'entrar en l'eina sigui
+      el color del color-picker (sobretot en el pas de la goma a una altra eina
+      com el pincell!!)
+
+    - Mirar perquè no funcionen les altres eines (cercle rectangle línia!!!)
+
+*/
+
 window.addEventListener('load', () => {
     // comprova si el navegador és compatible amb canvas
     try {
@@ -46,21 +60,21 @@ window.addEventListener('load', () => {
     canvas.addEventListener('mousedown', (e) => {
         console.log('mousedown');
         canvas.addEventListener('mousemove', obtenirPosicioCursor, false);
-        canvas.addEventListener('mousemove', onPaint, false);
+        //canvas.addEventListener('mousemove', onPaint, false);
 
         obtenirPosicioCursor();
         if (tool == 'brush' || tool == 'eraser') {
             ctx.beginPath();
             ctx.moveTo(mouse.x, mouse.y);
         }
-        else {
-            ctx.beginPath();
-        }
+
+        onPaint();
     }, false);
 
     canvas.addEventListener('mouseup', (e) => {
         console.log('mouseup');
         canvas.removeEventListener('mousemove', obtenirPosicioCursor, false);
+        //canvas.removeEventListener('mousemove', onPaint, false);
         puntsCursor.splice(0, puntsCursor.length - 1);
     }, false);
 
@@ -88,6 +102,10 @@ window.addEventListener('load', () => {
         ctx.strokeStyle = document.getElementById('btn-color-pick').value;
     };
 
+    let canviaMidaPincell = () => {
+        ctx.lineWidth = document.getElementById('mida-pincell').value;
+    };
+
     let onPaint = () => {
         console.log('onPaint');
         if (tool == 'brush') { onPaintBrush(); }
@@ -104,8 +122,17 @@ window.addEventListener('load', () => {
     let onPaintBrush = () => {
         console.log('onPaintBrush');
         console.log(`coords: ${mouse.x} , ${mouse.y}`);
-        ctx.lineTo(mouse.x, mouse.y);
-        ctx.stroke();
+        let pinta = () => {
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.stroke();
+        };
+
+        canvas.addEventListener('mousemove', pinta, false);
+        canvas.addEventListener('mouseup', () => {
+            canvas.removeEventListener('mousemove', pinta, false);
+        }, false);
+
+        ctx.closePath();
     };
 
     // LINIA
@@ -126,18 +153,26 @@ window.addEventListener('load', () => {
         // es neteja tot el canvas temp i es redibuixa
         // sense que afecti el canvas principal
 
+        // com onPaint esta assignat a mousemove d'abans
+        // torna a entrar tota la estona a onPaintLine
+
         let pintaLinia = () => {
             obtenirPosicioCursorAmbStartMouse();
+            /*
             tmpCtx.beginPath();
             tmpCtx.moveTo(startMouse.x, startMouse.y);
             lastMouse.x = startMouse.x;
             lastMouse.y = startMouse.y;
+            */
+            ctx.beginPath();
+            ctx.moveTo(startMouse.x, startMouse.y);
         };
 
         let arrossegaLinia = () => {
             obtenirPosicioCursor();
             // pintar al canvas temporal
             if (mouse.x !== lastMouse.x && mouse.y !== lastMouse.y) {
+                console.log('COORDINADES DIFERENTS');
                 tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
                 tmpCtx.moveTo(startMouse.x, startMouse.y);
                 tmpCtx.lineTo(mouse.x, mouse.y);
@@ -149,12 +184,16 @@ window.addEventListener('load', () => {
         };
 
         canvas.addEventListener('mousedown', pintaLinia, false);
-        canvas.addEventListener('mousemove', arrossegaLinia, false);
+        //canvas.addEventListener('mousemove', arrossegaLinia, false);
         canvas.addEventListener('mouseup', (e) => {
             canvas.removeEventListener('mousedown', pintaLinia, false);
-            canvas.removeEventListener('mousemove', arrossegaLinia, false);
+            /*canvas.removeEventListener('mousemove', arrossegaLinia, false);
             ctx.drawImage(tmpCanvas, 0, 0);
-            tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+            tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);*/
+            obtenirPosicioCursor();
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.stroke();
+            ctx.closePath();
         }, false);
     };
 
@@ -164,6 +203,7 @@ window.addEventListener('load', () => {
         console.log(`coords: ${mouse.x} , ${mouse.y}`);
 
         let pintaCercle = () => {
+            ctx.beginPath();
             ctx.arc(mouse.x, mouse.y, 50, 0, 2 * Math.PI);
             ctx.stroke();
         };
@@ -195,17 +235,26 @@ window.addEventListener('load', () => {
     // NETEJA EL CANVAS COMPLET
     let netejaCanvas = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
     };
 
     // GOMA D'ESBORRAR
     let onErase = () => {
         console.log('onErase');
         console.log(`coords: ${mouse.x} , ${mouse.y}`);
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.fillStyle = 'rgba(0,0,0,1)';   // QUAN SURT DE LA GOMA HA DE CANVIAR DE NOU EL STROKE/FILL STYLE PERQUÈ SI NO NO PINTARÀ RES!
-        ctx.strokeStyle = 'rgba(0,0,0,1)';
-        ctx.lineTo(mouse.x, mouse.y);
-        ctx.stroke();
+
+        let esborra = () => {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillStyle = 'rgba(0,0,0,1)';   // QUAN SURT DE LA GOMA HA DE CANVIAR DE NOU EL STROKE/FILL STYLE PERQUÈ SI NO NO PINTARÀ RES!
+            ctx.strokeStyle = 'rgba(0,0,0,1)';
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.stroke();
+        };
+
+        canvas.addEventListener('mousemove', esborra, false);
+        canvas.addEventListener('mouseup', () => {
+
+        }, false);
     };
 
     /************ FUNCIONS EINES ************/
@@ -216,6 +265,7 @@ window.addEventListener('load', () => {
     document.getElementById('btn-cercle').addEventListener('click', () => tool = 'circle');
     document.getElementById('btn-rectangle').addEventListener('click', () => tool = 'rectangle');
     document.getElementById('btn-color-pick').addEventListener('change', canviaColor);
+    document.getElementById('mida-pincell').addEventListener('change', canviaMidaPincell);
     document.getElementById('btn-neteja').addEventListener('click', netejaCanvas);
     document.getElementById('btn-goma').addEventListener('click', () => tool = 'eraser');
 }, true);

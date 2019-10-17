@@ -1,0 +1,31 @@
+HTML5-PaintApp
+https://github.com/iamshanedoyle/HTML5-PaintApp
+
+Small example of a html5 paint app
+https://github.com/gonzalocasaseca/paint
+
+Paint-like webapplication written in Javascript, HTML5
+https://github.com/tiste/paint
+
+justPaint
+https://github.com/maximuze/justPaint
+
+fractal-paint
+https://github.com/sirXemic/fractal-paint
+Online little tool to create fractal-ish images from simple drawings.
+
+★Paint-board
+http://gospodarets.com/developments/paint-board/
+Paint-board on HTML5 canvas (canvas, drag-and-drop, localstorage, js file API, AJAX)
+
+CanvasWebPaint
+http://github.com/boringmachine/CanvasWebPaint
+Paint app using HTML5, jQuery and PHP.
+
+doodlePaint5
+https://github.com/designoidgames/doodlePaint5
+Painting program for the Pokki platform, HTML5 and JS
+
+★Painter
+https://github.com/yanhaijing/Painter
+demo: http://yanhaijing.github.io/Painter/

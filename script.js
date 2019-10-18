@@ -60,7 +60,6 @@ window.addEventListener('load', () => {
     canvas.addEventListener('mousedown', (e) => {
         console.log('mousedown');
         canvas.addEventListener('mousemove', obtenirPosicioCursor, false);
-        //canvas.addEventListener('mousemove', onPaint, false);
 
         obtenirPosicioCursor();
         if (tool == 'brush' || tool == 'eraser') {
@@ -73,12 +72,16 @@ window.addEventListener('load', () => {
 
     canvas.addEventListener('mouseup', (e) => {
         console.log('mouseup');
+
+        if (tool == 'line') {
+            onPaint();
+        }
         canvas.removeEventListener('mousemove', obtenirPosicioCursor, false);
-        //canvas.removeEventListener('mousemove', onPaint, false);
+        
         puntsCursor.splice(0, puntsCursor.length - 1);
     }, false);
 
-    // funcions
+    /************ FUNCIONS GENERALS ************/
 
     let obtenirPosicioCursor = () => {
         let rect = canvas.getBoundingClientRect();
@@ -115,6 +118,7 @@ window.addEventListener('load', () => {
         else if (tool == 'ellipse') { drawEllipse(tmp_ctx); }
         else if (tool == 'eraser') { onErase(); }
     };
+    /************ FUNCIONS GENERALS ************/
 
     /************ FUNCIONS EINES ************/
 
@@ -156,8 +160,14 @@ window.addEventListener('load', () => {
         // com onPaint esta assignat a mousemove d'abans
         // torna a entrar tota la estona a onPaintLine
 
-        let pintaLinia = () => {
-            obtenirPosicioCursorAmbStartMouse();
+
+
+        // Si faig un onPaint en el event de mouseUp (el general)
+        // fa bé la línia pero no el brush
+
+        let pintaLinia = () => { 
+            // recull la posició inicial del cursor
+            obtenirPosicioCursorAmbStartMouse();           
             /*
             tmpCtx.beginPath();
             tmpCtx.moveTo(startMouse.x, startMouse.y);
@@ -193,7 +203,7 @@ window.addEventListener('load', () => {
             obtenirPosicioCursor();
             ctx.lineTo(mouse.x, mouse.y);
             ctx.stroke();
-            ctx.closePath();
+            //ctx.closePath();
         }, false);
     };
 

@@ -65,8 +65,12 @@ window.addEventListener('load', () => {
         if (tool == 'brush' || tool == 'eraser') {
             ctx.beginPath();
             ctx.moveTo(mouse.x, mouse.y);
+            
+            console.log(`Global composite operation: ${ctx.globalCompositeOperation}`);
+            console.log(`Line color: ${ctx.strokeStyle}`);
         }
 
+        canviaColor(); // per assegurar-nos de que sempre té el color escollit al color-picker
         onPaint();
     }, false);
 
@@ -255,7 +259,7 @@ window.addEventListener('load', () => {
 
         let esborra = () => {
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.fillStyle = 'rgba(0,0,0,1)';   // QUAN SURT DE LA GOMA HA DE CANVIAR DE NOU EL STROKE/FILL STYLE PERQUÈ SI NO NO PINTARÀ RES!
+            ctx.fillStyle = 'rgba(0,0,0,1)';  
             ctx.strokeStyle = 'rgba(0,0,0,1)';
             ctx.lineTo(mouse.x, mouse.y);
             ctx.stroke();
@@ -263,7 +267,8 @@ window.addEventListener('load', () => {
 
         canvas.addEventListener('mousemove', esborra, false);
         canvas.addEventListener('mouseup', () => {
-
+            canvas.removeEventListener('mousemove', esborra, false);
+            ctx.globalCompositeOperation = 'source-over';
         }, false);
     };
 

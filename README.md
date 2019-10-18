@@ -3,7 +3,7 @@
 
 L'aplicació es pot probar <a href="https://bielsesa.github.io/paint-canvas2d-html5-daw2/">aquí</a>.
 
-Les eines totalment implementades actualment són:
+Les eines que funcionen actualment (tot i que encara s'han de millorar) són:
 
 <ul>
   <li>Pincell</li>  
@@ -17,7 +17,7 @@ Les eines totalment implementades actualment són:
 
 The application can be tested <a href="https://bielsesa.github.io/paint-canvas2d-html5-daw2/">here</a>.
 
-The tools that are totally implemented for now are:
+The tools that work for now (though they still need improvements) are:
 
 <ul>
   <li>Brush</li>  

@@ -11,6 +11,7 @@ Les eines que funcionen actualment (tot i que encara s'han de millorar) són:
   <li>Goma d'esborrar</li>
   <li>Netejar tot el canvas</li>  
   <li>Canvi de color</li>  
+  <li>Canvi de mida del pincell</li>  
 </ul>
 
 <b>[ENG]</b>
@@ -25,4 +26,5 @@ The tools that work for now (though they still need improvements) are:
   <li>Eraser</li>
   <li>Clear the canvas</li>  
   <li>Change line color</li>  
+  <li>Change line width</li>  
 </ul>

@@ -58,16 +58,12 @@ window.addEventListener('load', () => {
     let tool = 'brush';
 
     canvas.addEventListener('mousedown', (e) => {
-        console.log('mousedown');
         canvas.addEventListener('mousemove', obtenirPosicioCursor, false);
 
         obtenirPosicioCursor();
-        if (tool == 'brush' || tool == 'eraser') {
+        if (tool == 'brush' || tool == 'eraser' || tool == 'line') {
             ctx.beginPath();
             ctx.moveTo(mouse.x, mouse.y);
-            
-            console.log(`Global composite operation: ${ctx.globalCompositeOperation}`);
-            console.log(`Line color: ${ctx.strokeStyle}`);
         }
 
         canviaColor(); // per assegurar-nos de que sempre té el color escollit al color-picker
@@ -75,11 +71,10 @@ window.addEventListener('load', () => {
     }, false);
 
     canvas.addEventListener('mouseup', (e) => {
-        console.log('mouseup');
-
         if (tool == 'line') {
             onPaint();
         }
+
         canvas.removeEventListener('mousemove', obtenirPosicioCursor, false);
         
         puntsCursor.splice(0, puntsCursor.length - 1);
@@ -171,43 +166,19 @@ window.addEventListener('load', () => {
 
         let pintaLinia = () => { 
             // recull la posició inicial del cursor
-            obtenirPosicioCursorAmbStartMouse();           
-            /*
-            tmpCtx.beginPath();
-            tmpCtx.moveTo(startMouse.x, startMouse.y);
-            lastMouse.x = startMouse.x;
-            lastMouse.y = startMouse.y;
-            */
+            obtenirPosicioCursorAmbStartMouse();
+            
             ctx.beginPath();
             ctx.moveTo(startMouse.x, startMouse.y);
-        };
-
-        let arrossegaLinia = () => {
-            obtenirPosicioCursor();
-            // pintar al canvas temporal
-            if (mouse.x !== lastMouse.x && mouse.y !== lastMouse.y) {
-                console.log('COORDINADES DIFERENTS');
-                tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
-                tmpCtx.moveTo(startMouse.x, startMouse.y);
-                tmpCtx.lineTo(mouse.x, mouse.y);
-                tmpCtx.stroke();
-
-                lastMouse.x = mouse.x;
-                lastMouse.y = mouse.y;
-            }
         };
 
         canvas.addEventListener('mousedown', pintaLinia, false);
         //canvas.addEventListener('mousemove', arrossegaLinia, false);
         canvas.addEventListener('mouseup', (e) => {
             canvas.removeEventListener('mousedown', pintaLinia, false);
-            /*canvas.removeEventListener('mousemove', arrossegaLinia, false);
-            ctx.drawImage(tmpCanvas, 0, 0);
-            tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);*/
             obtenirPosicioCursor();
             ctx.lineTo(mouse.x, mouse.y);
             ctx.stroke();
-            //ctx.closePath();
         }, false);
     };
 

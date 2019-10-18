@@ -30,7 +30,11 @@ Painting program for the Pokki platform, HTML5 and JS
 https://github.com/yanhaijing/Painter
 demo: http://yanhaijing.github.io/Painter/
 
+!!!!
+http://cssdeck.com/labs/uoill26x
+
 ---------------------------------------------------------------------------------------------
 
 Change mouse cursor
 https://stackoverflow.com/questions/41248257/resizing-css-custom-mouse-cursor
+

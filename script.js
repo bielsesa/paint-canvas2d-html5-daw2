@@ -60,25 +60,32 @@ window.addEventListener('load', () => {
     canvas.addEventListener('mousedown', (e) => {
         console.log('mousedown');
         canvas.addEventListener('mousemove', obtenirPosicioCursor, false);
-        //canvas.addEventListener('mousemove', onPaint, false);
 
         obtenirPosicioCursor();
         if (tool == 'brush' || tool == 'eraser') {
             ctx.beginPath();
             ctx.moveTo(mouse.x, mouse.y);
+            
+            console.log(`Global composite operation: ${ctx.globalCompositeOperation}`);
+            console.log(`Line color: ${ctx.strokeStyle}`);
         }
 
+        canviaColor(); // per assegurar-nos de que sempre té el color escollit al color-picker
         onPaint();
     }, false);
 
     canvas.addEventListener('mouseup', (e) => {
         console.log('mouseup');
+
+        if (tool == 'line') {
+            onPaint();
+        }
         canvas.removeEventListener('mousemove', obtenirPosicioCursor, false);
-        //canvas.removeEventListener('mousemove', onPaint, false);
+        
         puntsCursor.splice(0, puntsCursor.length - 1);
     }, false);
 
-    // funcions
+    /************ FUNCIONS GENERALS ************/
 
     let obtenirPosicioCursor = () => {
         let rect = canvas.getBoundingClientRect();
@@ -115,6 +122,7 @@ window.addEventListener('load', () => {
         else if (tool == 'ellipse') { drawEllipse(tmp_ctx); }
         else if (tool == 'eraser') { onErase(); }
     };
+    /************ FUNCIONS GENERALS ************/
 
     /************ FUNCIONS EINES ************/
 
@@ -156,8 +164,14 @@ window.addEventListener('load', () => {
         // com onPaint esta assignat a mousemove d'abans
         // torna a entrar tota la estona a onPaintLine
 
-        let pintaLinia = () => {
-            obtenirPosicioCursorAmbStartMouse();
+
+
+        // Si faig un onPaint en el event de mouseUp (el general)
+        // fa bé la línia pero no el brush
+
+        let pintaLinia = () => { 
+            // recull la posició inicial del cursor
+            obtenirPosicioCursorAmbStartMouse();           
             /*
             tmpCtx.beginPath();
             tmpCtx.moveTo(startMouse.x, startMouse.y);
@@ -193,7 +207,7 @@ window.addEventListener('load', () => {
             obtenirPosicioCursor();
             ctx.lineTo(mouse.x, mouse.y);
             ctx.stroke();
-            ctx.closePath();
+            //ctx.closePath();
         }, false);
     };
 
@@ -245,7 +259,7 @@ window.addEventListener('load', () => {
 
         let esborra = () => {
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.fillStyle = 'rgba(0,0,0,1)';   // QUAN SURT DE LA GOMA HA DE CANVIAR DE NOU EL STROKE/FILL STYLE PERQUÈ SI NO NO PINTARÀ RES!
+            ctx.fillStyle = 'rgba(0,0,0,1)';  
             ctx.strokeStyle = 'rgba(0,0,0,1)';
             ctx.lineTo(mouse.x, mouse.y);
             ctx.stroke();
@@ -253,7 +267,8 @@ window.addEventListener('load', () => {
 
         canvas.addEventListener('mousemove', esborra, false);
         canvas.addEventListener('mouseup', () => {
-
+            canvas.removeEventListener('mousemove', esborra, false);
+            ctx.globalCompositeOperation = 'source-over';
         }, false);
     };
 

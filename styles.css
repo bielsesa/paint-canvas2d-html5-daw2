@@ -97,12 +97,12 @@ footer {
     height: 500px;
     margin: 10px;
     position: relative;
-    width: 900px;
+    width: 1200px;
 }
 
 #paint canvas {
     background: transparent;
-    cursor: crosshair;
+    cursor: crosshair/*url(img/icon-pincell.png), auto*/;
     left: 0;
     position: absolute;
     top: 0;
@@ -120,6 +120,10 @@ footer {
     float: left;
     margin: 10px;
     padding: 5px;
+}
+
+#opcions-eines img, button {
+    display: block;
 }
 
 #opcions-eina-actual {

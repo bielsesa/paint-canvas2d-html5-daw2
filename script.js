@@ -186,12 +186,6 @@ window.addEventListener(
       let pintaLinia = () => {
         // recull la posició inicial del cursor
         obtenirPosicioCursorAmbStartMouse();
-        /*
-            tmpCtx.beginPath();
-            tmpCtx.moveTo(startMouse.x, startMouse.y);
-            lastMouse.x = startMouse.x;
-            lastMouse.y = startMouse.y;
-            */
         ctx.beginPath();
         ctx.moveTo(startMouse.x, startMouse.y);
       };
@@ -212,18 +206,13 @@ window.addEventListener(
       };
 
       canvas.addEventListener("mousedown", pintaLinia, false);
-      //canvas.addEventListener('mousemove', arrossegaLinia, false);
       canvas.addEventListener(
         "mouseup",
         e => {
           canvas.removeEventListener("mousedown", pintaLinia, false);
-          /*canvas.removeEventListener('mousemove', arrossegaLinia, false);
-            ctx.drawImage(tmpCanvas, 0, 0);
-            tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);*/
           obtenirPosicioCursor();
           ctx.lineTo(mouse.x, mouse.y);
           ctx.stroke();
-          //ctx.closePath();
         },
         false
       );
@@ -296,6 +285,7 @@ window.addEventListener(
         "mouseup",
         () => {
           canvas.removeEventListener("mousemove", esborra, false);
+          ctx.closePath();
           ctx.globalCompositeOperation = "source-over";
         },
         false

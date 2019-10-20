@@ -12,6 +12,7 @@ Les eines que funcionen actualment (tot i que encara s'han de millorar) són:
   <li>Netejar tot el canvas</li>  
   <li>Canvi de color</li>  
   <li>Canvi de mida del pincell</li>  
+  <li>Guardar el dibuix com imatge (Nota: el fons és transparent!)</li>  
 </ul>
 
 <b>[ENG]</b>
@@ -27,4 +28,5 @@ The tools that work for now (though they still need improvements) are:
   <li>Clear the canvas</li>  
   <li>Change line color</li>  
   <li>Change line width</li>  
+  <li>Save drawing as image (the background is transparent!)</li>  
 </ul>

@@ -35,6 +35,12 @@ http://cssdeck.com/labs/uoill26x
 
 ---------------------------------------------------------------------------------------------
 
+Code on cssdeck
+http://cssdeck.com/labs/uoill26x
+
 Change mouse cursor
 https://stackoverflow.com/questions/41248257/resizing-css-custom-mouse-cursor
+
+Change text on input file button
+https://stackoverflow.com/questions/1944267/how-to-change-the-button-text-of-input-type-file
 

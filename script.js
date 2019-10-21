@@ -23,11 +23,7 @@ window.addEventListener(
         let painting = document.getElementById('paint');
         let paintStyle = getComputedStyle(painting);
 
-        // valors per defecte pel tipus de traç
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = 3;
-        ctx.lineJoin = 'round';
-        ctx.lineCap = 'round';
+        
 
         // s'assignen els valors d'alçada i amplada
         canvas.width = parseInt(paintStyle.getPropertyValue('width'));
@@ -39,11 +35,21 @@ window.addEventListener(
         tmpCanvas.width = canvas.width;
         tmpCanvas.height = canvas.height;
         canvas.parentNode.insertBefore(tmpCanvas, canvas);
+        
+        // valors per defecte pel tipus de traç
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 3;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+
+        tmpCtx.strokeStyle = '#000';
+        tmpCtx.lineWidth = 3;
+        tmpCtx.lineJoin = 'round';
+        tmpCtx.lineCap = 'round';   
 
         // variables que recullen les coordinades del ratolí
         let mouse = { x: 0, y: 0 };
         let startMouse = { x: 0, y: 0 };
-        let lastMouse = { x: 0, y: 0 };
         let puntsCursor = [];
 
         // l'eina per defecte és el pincell
@@ -78,26 +84,20 @@ window.addEventListener(
         let onPaint = () => {
             console.log('onPaint');
             if (tool == 'pincell') {
-                /*ctx.beginPath();
-                ctx.moveTo(mouse.x, mouse.y);
-                onPaintPincell();*/
-
                 canvas.addEventListener('mousemove', onPaintPincell, false);
                 onPaintPincell();
-            } else if (tool == 'cercle') {
-                canvas.addEventListener('mousemove', onPaintCercle, false);
-                onPaintCercle();
             } else if (tool == 'linia') {
                 canvas.addEventListener('mousemove', onPaintLinia, false);
                 onPaintLinia();
+            } else if (tool == 'cercle') {
+                canvas.addEventListener('mousemove', onPaintCercle, false);
+                onPaintCercle();
             } else if (tool == 'rectangle') {
                 canvas.addEventListener('mousemove', onPaintRect, false);
                 onPaintRect();
             } else if (tool == 'text') {
                 canvas.addEventListener('mousemove', dibuixaText, false);
                 dibuixaText();
-            } else if (tool == 'ellipse') {
-                drawEllipse(tmp_ctx);
             } else if (tool == 'goma') {
                 ctx.beginPath();
                 ctx.moveTo(mouse.x, mouse.y);
@@ -163,8 +163,8 @@ window.addEventListener(
             if (puntsCursor.length < 3) {
                 let b = puntsCursor[0];
                 tmpCtx.lineWidth = ctx.lineWidth;
-                tmpCtx.lineJoin = 'round';
-                tmpCtx.lineCap = 'round';
+                /*tmpCtx.lineJoin = 'round';
+                tmpCtx.lineCap = 'round';*/
                 tmpCtx.strokeStyle = ctx.strokeStyle;
                 tmpCtx.fillStyle = ctx.strokeStyle;
                 tmpCtx.beginPath();
@@ -205,6 +205,9 @@ window.addEventListener(
             // (per assegurar-nos que està net sempre)
             tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
 
+            tmpCtx.lineWidth = ctx.lineWidth;
+            tmpCtx.strokeStyle = ctx.strokeStyle;
+
             tmpCtx.beginPath();
             tmpCtx.moveTo(startMouse.x, startMouse.y);
             tmpCtx.lineTo(mouse.x, mouse.y);
@@ -217,6 +220,9 @@ window.addEventListener(
             // sempre es neteja el canvas temporal abans de dibuixar
             // (per assegurar-nos que està net sempre)
             tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+
+            tmpCtx.lineWidth = ctx.lineWidth;
+            tmpCtx.strokeStyle = ctx.strokeStyle;
 
             let x = (mouse.x + startMouse.x) / 2;
             let y = (mouse.y + startMouse.y) / 2;
@@ -237,6 +243,9 @@ window.addEventListener(
             // (per assegurar-nos que està net sempre)
             tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
 
+            tmpCtx.lineWidth = ctx.lineWidth;
+            tmpCtx.strokeStyle = ctx.strokeStyle;
+            
             let x = Math.min(mouse.x, startMouse.x);
             let y = Math.min(mouse.y, startMouse.y);
             let width = Math.abs(mouse.x - startMouse.x);
@@ -299,6 +308,29 @@ window.addEventListener(
                 .replace('/^data:image\/[^;]/', 'data:application/octet-stream');
         };
 
+        // PUJAR IMATGE D'ARXIU
+        let pujarImatge = (e) => {
+            let lectorArxiu = new FileReader();
+            lectorArxiu.onload = (e) => {
+                let img = new Image();
+                img.onload = () => {
+                    let w = img.width;
+                    let h = img.height
+                    // si l'amplada de la imatge és més gran que el canvas, escala
+                    if (w > canvas.width) { 
+                        w = canvas.width;
+                    }
+                    // si l'alçada de la imatge és més gran que el canvas, escala
+                    if (h > canvas.height) {
+                        h = canvas.height;
+                    }
+                    ctx.drawImage(img, 0, 0, w, h);
+                }
+                img.src = e.target.result;
+            };
+            lectorArxiu.readAsDataURL(e.target.files[0]);
+        };
+
         /************ FUNCIONS EINES ************/
 
         /************ EVENT LISTENERS DELS BOTONS ************/
@@ -333,7 +365,9 @@ window.addEventListener(
         document
             .getElementById('btn-goma')
             .addEventListener('click', () => (tool = 'goma'), false);
-
+        document.
+        getElementById('btn-pujar-imatge')
+        .addEventListener('change', pujarImatge, false);
         /************ EVENT LISTENERS DELS BOTONS ************/
     },
     true

@@ -82,8 +82,8 @@ window.addEventListener(
                 ctx.moveTo(mouse.x, mouse.y);
                 onPaintPincell();*/
 
-                canvas.addEventListener('mousemove', onBrushPaint, false);
-                onBrushPaint();
+                canvas.addEventListener('mousemove', onPaintPincell, false);
+                onPaintPincell();
             } else if (tool == 'cercle') {
                 canvas.addEventListener('mousemove', onPaintCercle, false);
                 onPaintCercle();
@@ -128,7 +128,7 @@ window.addEventListener(
             'mouseup',
             e => {
                 if (tool == 'pincell') {
-                    canvas.removeEventListener('mousemove', onBrushPaint, false);
+                    canvas.removeEventListener('mousemove', onPaintPincell, false);
                 } else if (tool == 'linia') {
                     canvas.removeEventListener('mousemove', onPaintLinia, false);
                 } else if (tool == 'cercle') {
@@ -155,26 +155,6 @@ window.addEventListener(
 
         // PINCELL
         let onPaintPincell = () => {
-            console.log('onPaintPincell');
-            console.log(`coords: ${mouse.x} , ${mouse.y}`);
-            let pinta = () => {
-                ctx.lineTo(mouse.x, mouse.y);
-                ctx.stroke();
-            };
-
-            canvas.addEventListener('mousemove', pinta, false);
-            canvas.addEventListener(
-                'mouseup',
-                () => {
-                    canvas.removeEventListener('mousemove', pinta, false);
-                },
-                false
-            );
-
-            ctx.closePath();
-        };
-
-        let onBrushPaint = () => {
             puntsCursor.push({
                 x: mouse.x,
                 y: mouse.y

@@ -4,12 +4,7 @@
 
 // TODO:
 /*
-    - Assegurar-se de que el color escollit a l'hora d'entrar en l'eina sigui
-      el color del color-picker (sobretot en el pas de la goma a una altra eina
-      com el pincell!!)
-
     - Mirar perquè no funcionen les altres eines (cercle rectangle línia!!!)
-
 */
 
 window.addEventListener(
@@ -27,9 +22,6 @@ window.addEventListener(
     let canvas = document.getElementById("area-dibuix");
     let ctx = canvas.getContext("2d");
 
-    let tmpCanvas = document.createElement("canvas");
-    let tmpCtx = tmpCanvas.getContext("2d");
-
     // recull el div contenidor dels canvas per calcular la mida
     // dels canvas
     // getComputedStyle recull les característiques del div (alçada, amplada)
@@ -46,19 +38,21 @@ window.addEventListener(
     canvas.width = parseInt(paintStyle.getPropertyValue("width"));
     canvas.height = parseInt(paintStyle.getPropertyValue("height"));
 
+    // creació canvas temporal
+    let tmpCanvas = document.createElement("canvas");
+    let tmpCtx = tmpCanvas.getContext("2d");
     tmpCanvas.width = canvas.width;
     tmpCanvas.height = canvas.height;
-
     canvas.parentNode.insertBefore(tmpCanvas, canvas);
 
-    // variable que recull les coordinades del ratolí
+    // variables que recullen les coordinades del ratolí
     let mouse = { x: 0, y: 0 };
     let startMouse = { x: 0, y: 0 };
     let lastMouse = { x: 0, y: 0 };
     let puntsCursor = [];
 
     // l'eina per defecte és el pincell
-    let tool = "brush";
+    let tool = "pincell";
 
     canvas.addEventListener(
       "mousedown",
@@ -66,9 +60,12 @@ window.addEventListener(
         canvas.addEventListener("mousemove", obtenirPosicioCursor, false);
 
         obtenirPosicioCursor();
-        if (tool == "brush" || tool == "eraser") {
+        if (tool == "pincell" || tool == "goma") {
           ctx.beginPath();
           ctx.moveTo(mouse.x, mouse.y);
+        }
+        else if (tool == 'cercle') {
+            canvas.addEventListener('mousedown', onPaintCercle, false);
         }
 
         canviaColor(); // per assegurar-nos de que sempre té el color escollit al color-picker
@@ -80,12 +77,18 @@ window.addEventListener(
     canvas.addEventListener(
       "mouseup",
       e => {
-        if (tool == "line") {
+        if (tool == "linia") {
           onPaint();
+        }else if (tool == 'cercle') {
+            canvas.removeEventListener('mousedown', onPaintCercle, false);
         }
         canvas.removeEventListener("mousemove", obtenirPosicioCursor, false);
 
-        puntsCursor.splice(0, puntsCursor.length - 1);
+        // dibuixar en el canvas final i netejar el temporal
+        ctx.drawImage(tmpCanvas, 0, 0);
+        tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+        // retornar a 0 l'array de punts del cursor
+        puntsCursor = [];
       },
       false
     );
@@ -120,17 +123,17 @@ window.addEventListener(
 
     let onPaint = () => {
       console.log("onPaint");
-      if (tool == "brush") {
-        onPaintBrush();
-      } else if (tool == "circle") {
-        onPaintCircle();
-      } else if (tool == "line") {
-        onPaintLine();
+      if (tool == "pincell") {
+        onPaintPincell();
+      } else if (tool == "cercle") {
+        onPaintCercle();
+      } else if (tool == "linia") {
+        onPaintLinia();
       } else if (tool == "rectangle") {
         onPaintRect();
       } else if (tool == "ellipse") {
         drawEllipse(tmp_ctx);
-      } else if (tool == "eraser") {
+      } else if (tool == "goma") {
         onErase();
       }
     };
@@ -139,8 +142,8 @@ window.addEventListener(
     /************ FUNCIONS EINES ************/
 
     // PINCELL
-    let onPaintBrush = () => {
-      console.log("onPaintBrush");
+    let onPaintPincell = () => {
+      console.log("onPaintPincell");
       console.log(`coords: ${mouse.x} , ${mouse.y}`);
       let pinta = () => {
         ctx.lineTo(mouse.x, mouse.y);
@@ -160,7 +163,7 @@ window.addEventListener(
     };
 
     // LINIA
-    let onPaintLine = () => {
+    let onPaintLinia = () => {
         // agafa la coordinada inicial
         // i després la coordinada fins on es fa el drag
         // finalment pinta la linia
@@ -178,12 +181,12 @@ window.addEventListener(
         // sense que afecti el canvas principal
 
         // com onPaint esta assignat a mousemove d'abans
-        // torna a entrar tota la estona a onPaintLine
+        // torna a entrar tota la estona a onPaintLinia
 
 
 
         // Si faig un onPaint en el event de mouseUp (el general)
-        // fa bé la línia pero no el brush
+        // fa bé la línia pero no el pincell
 
         let pintaLinia = () => { 
             // recull la posició inicial del cursor
@@ -204,11 +207,22 @@ window.addEventListener(
     };
 
     // CERCLE
-    let onPaintCircle = () => {
-      console.log("onPaintCircle");
-      console.log(`coords: ${mouse.x} , ${mouse.y}`);
+    let onPaintCercle = () => {
+      console.log("onPaintCercle");
 
-      let pintaCercle = () => {
+        let x = (mouse.x + startMouse.x) / 2;
+        let y = (mouse.y + startMouse.y) / 2;
+
+        let radi = Math.max(
+            Math.abs(mouse.x - startMouse.x),
+            Math.abs(mouse.y - startMouse.y)) / 2;
+
+        tmpCtx.beginPath();
+        tmpCtx.arc(x, y, radi, 0, Math.PI * 2, false);
+        tmpCtx.stroke();
+        tmpCtx.closePath();
+
+      /*let pintaCercle = () => {
         ctx.beginPath();
         ctx.arc(mouse.x, mouse.y, 50, 0, 2 * Math.PI);
         ctx.stroke();
@@ -223,6 +237,7 @@ window.addEventListener(
         },
         false
       );
+      */
     };
 
     // RECTANGLE
@@ -291,13 +306,13 @@ window.addEventListener(
     // assignació de event listeners per les eines
     document
       .getElementById("btn-pincell")
-      .addEventListener("click", () => (tool = "brush"));
+      .addEventListener("click", () => (tool = "pincell"));
     document
       .getElementById("btn-linia")
-      .addEventListener("click", () => (tool = "line"));
+      .addEventListener("click", () => (tool = "linia"));
     document
       .getElementById("btn-cercle")
-      .addEventListener("click", () => (tool = "circle"));
+      .addEventListener("click", () => (tool = "cercle"));
     document
       .getElementById("btn-rectangle")
       .addEventListener("click", () => (tool = "rectangle"));
@@ -315,7 +330,7 @@ window.addEventListener(
       .addEventListener("click", netejaCanvas);
     document
       .getElementById("btn-goma")
-      .addEventListener("click", () => (tool = "eraser"));
+      .addEventListener("click", () => (tool = "goma"));
   },
   true
 );

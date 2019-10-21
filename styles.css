@@ -136,6 +136,10 @@ footer {
     width: 180px;    
 }
 
+#opcions-eina-actual span {
+    background: transparent;
+}
+
 #mida-pincell {
     margin: 5px;
 }

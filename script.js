@@ -2,7 +2,6 @@
 // DAW2 Escola Jesuïtes El Clot
 // Curs 2019-20
 
-
 window.addEventListener(
     'load',
     () => {
@@ -56,8 +55,6 @@ window.addEventListener(
             let rect = canvas.getBoundingClientRect();
             mouse.x = event.clientX - rect.left;
             mouse.y = event.clientY - rect.top;
-
-            puntsCursor.push({ x: mouse.x, y: mouse.y });
         };
 
         let obtenirPosicioCursorAmbStartMouse = () => {
@@ -75,14 +72,18 @@ window.addEventListener(
 
         let canviaMidaPincell = () => {
             ctx.lineWidth = document.getElementById('mida-pincell').value;
+            document.getElementById('valor-mida-pincell').innerHTML = ctx.lineWidth;
         };
 
         let onPaint = () => {
             console.log('onPaint');
             if (tool == 'pincell') {
-                ctx.beginPath();
+                /*ctx.beginPath();
                 ctx.moveTo(mouse.x, mouse.y);
-                onPaintPincell();
+                onPaintPincell();*/
+
+                canvas.addEventListener('mousemove', onBrushPaint, false);
+                onBrushPaint();
             } else if (tool == 'cercle') {
                 canvas.addEventListener('mousemove', onPaintCercle, false);
                 onPaintCercle();
@@ -103,9 +104,11 @@ window.addEventListener(
                 onErase();
             }
         };
+
         /************ FUNCIONS GENERALS ************/
 
         /************ EVENT LISTENERS ************/
+
         // event listener per recollir les coordinades del cursor
         canvas.addEventListener('mousemove', obtenirPosicioCursor, false);
 
@@ -124,8 +127,9 @@ window.addEventListener(
         canvas.addEventListener(
             'mouseup',
             e => {
-                if (tool == 'linia') {
-                    onPaint();
+                if (tool == 'pincell') {
+                    canvas.removeEventListener('mousemove', onBrushPaint, false);
+                } else if (tool == 'linia') {
                     canvas.removeEventListener('mousemove', onPaintLinia, false);
                 } else if (tool == 'cercle') {
                     canvas.removeEventListener('mousemove', onPaintCercle, false);
@@ -168,6 +172,47 @@ window.addEventListener(
             );
 
             ctx.closePath();
+        };
+
+        let onBrushPaint = () => {
+            puntsCursor.push({
+                x: mouse.x,
+                y: mouse.y
+            });
+
+            if (puntsCursor.length < 3) {
+                let b = puntsCursor[0];
+                tmpCtx.lineWidth = ctx.lineWidth;
+                tmpCtx.lineJoin = 'round';
+                tmpCtx.lineCap = 'round';
+                tmpCtx.strokeStyle = ctx.strokeStyle;
+                tmpCtx.fillStyle = ctx.strokeStyle;
+                tmpCtx.beginPath();
+                tmpCtx.arc(b.x, b.y, tmpCtx.lineWidth / 2, 0, Math.PI * 2, !0);
+                tmpCtx.fill();
+                tmpCtx.closePath();
+
+                return;
+            }
+
+            tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+
+            tmpCtx.beginPath();
+            tmpCtx.moveTo(puntsCursor[0].x, puntsCursor[0].y);
+
+            for (var i = 1; i < puntsCursor.length - 2; i++) {
+                let c = (puntsCursor[i].x + puntsCursor[i + 1].x) / 2;
+                let d = (puntsCursor[i].y + puntsCursor[i + 1].y) / 2;
+
+                tmpCtx.quadraticCurveTo(puntsCursor[i].x, puntsCursor[i].y, c, d);
+            }
+
+            tmpCtx.quadraticCurveTo(
+                puntsCursor[i].x,
+                puntsCursor[i].y,
+                puntsCursor[i + 1].x,
+                puntsCursor[i + 1].y);
+            tmpCtx.stroke();
         };
 
         // LINIA
@@ -234,12 +279,6 @@ window.addEventListener(
             }, false);
         };
 
-        // NETEJA EL CANVAS COMPLET
-        let netejaCanvas = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
-        };
-
         // GOMA D'ESBORRAR
         let onErase = () => {
             console.log('onErase');
@@ -265,6 +304,12 @@ window.addEventListener(
             );
         };
 
+        // NETEJA EL CANVAS COMPLET
+        let netejaCanvas = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+        };
+
         // GUARDAR CANVAS COM A IMATGE
         let guardarComImatge = () => {
             document.getElementById('a-descarrega').download = 'imatge.png';
@@ -276,7 +321,8 @@ window.addEventListener(
 
         /************ FUNCIONS EINES ************/
 
-        // assignació de event listeners per les eines
+        /************ EVENT LISTENERS DELS BOTONS ************/
+
         document
             .getElementById('btn-pincell')
             .addEventListener('click', () => (tool = 'pincell'), false);
@@ -307,6 +353,8 @@ window.addEventListener(
         document
             .getElementById('btn-goma')
             .addEventListener('click', () => (tool = 'goma'), false);
+
+        /************ EVENT LISTENERS DELS BOTONS ************/
     },
     true
 );

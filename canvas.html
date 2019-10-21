@@ -1,48 +1,54 @@
 <!DOCTYPE html>
-
-<head>
-    <meta charset="utf-8">
+<html>
+  <head>
+    <meta charset="utf-8" />
     <title>Aplicació Paint - Canvas</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <script src="script.js"></script>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <header>
-        <h1>Aplicació Paint amb Canvas 2D</h1>
-        <h3>Projecte de HTML5 de DAW2</h4>
+      <h1>Aplicació Paint amb Canvas 2D</h1>
+      <h3>Projecte de HTML5 de DAW2</h3>
     </header>
     <div id="contingut">
-        <nav>
-            <a id="nav-home" href="index.html">Pàgina principal</a>
-            <a id="nav-canvas" href="canvas.html">LET'S GET TO IT</a>
-        </nav>
-        <div id="aplicacio">
-            <div id="opcions-eines">
-                <img class="icon" src="img/icon-pincell.png" id="btn-pincell">
-                <button id="btn-linia">Línia</button>
-                <button id="btn-cercle">Cercle</button>
-                <button id="btn-rectangle">Rectangle</button>
-                <button id="btn-triangle">Triangle</button>
-                <button id="btn-text">Text</button>
-                <button id="btn-guardar">Guardar com...</button>
-                <img class="icon" src="img/icon-goma.png" id="btn-goma">
-                <button id="btn-neteja">Neteja</button>
-                <input type="color" id="btn-color-pick" placeholder="#000" />
-            </div>
-            <div id="paint">
-                <canvas id="area-dibuix"></canvas>
-            </div>
-            <div id="opcions-eina-actual">
-                Mida línia: <input type="range" id="mida-pincell" min="1" max="100" value="3">
-                <!-- FER SPAN DESPRÉS DEL TEXT PER PODER POSAR LA MIDA ACTUAN DE LA LÍNIA -->
-            </div>
+      <nav>
+        <a id="nav-home" href="index.html">Pàgina principal</a>
+        <a id="nav-canvas" href="canvas.html">LET'S GET TO IT</a>
+      </nav>
+      <div id="aplicacio">
+        <div id="opcions-eines">
+          <img class="icon" src="img/icon-pincell.png" id="btn-pincell" />
+          <img class="icon" src="img/icon-linia.png" id="btn-linia" />
+          <img class="icon" src="img/icon-cercle.png" id="btn-cercle" />
+          <img class="icon" src="img/icon-rect.png" id="btn-rectangle" />
+          <img class="icon" src="img/icon-text.png" id="btn-text" />
+          <a href="#" id="a-descarrega" download="imatge.png">
+            <img class="icon" src="img/icon-guardar.png" id="btn-guardar" />
+          </a>
+          <img class="icon" src="img/icon-goma.png" id="btn-goma" />
+          <img class="icon" src="img/icon-neteja.png" id="btn-neteja" />
         </div>
-    </div>    
+        <div id="paint">
+          <canvas id="area-dibuix"></canvas>
+        </div>
+        <div id="opcions-eina-actual">
+          Mida línia:
+          <input type="range" id="mida-pincell" min="1" max="100" value="3" />
+          <!-- FER SPAN DESPRÉS DEL TEXT PER PODER POSAR LA MIDA ACTUAN DE LA LÍNIA -->
+          Color:
+          <input
+            class="icon"
+            type="color"
+            id="btn-color-pick"
+            placeholder="#000"
+          />
+        </div>
+      </div>
+    </div>
     <footer>
-        Biel Serrano Sánchez, Escola Jesuïtes El Clot DAW2, 2019
+      Biel Serrano Sánchez, Escola Jesuïtes El Clot DAW2, 2019
     </footer>
-</body>
-
+  </body>
 </html>

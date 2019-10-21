@@ -80,16 +80,26 @@ window.addEventListener(
         let onPaint = () => {
             console.log('onPaint');
             if (tool == 'pincell') {
+                ctx.beginPath();
+                ctx.moveTo(mouse.x, mouse.y);
                 onPaintPincell();
             } else if (tool == 'cercle') {
+                canvas.addEventListener('mousemove', onPaintCercle, false);
                 onPaintCercle();
             } else if (tool == 'linia') {
+                canvas.addEventListener('mousemove', onPaintLinia, false);
                 onPaintLinia();
             } else if (tool == 'rectangle') {
+                canvas.addEventListener('mousemove', onPaintRect, false);
                 onPaintRect();
+            } else if (tool == 'text') {
+                canvas.addEventListener('mousemove', dibuixaText, false);
+                dibuixaText();
             } else if (tool == 'ellipse') {
                 drawEllipse(tmp_ctx);
             } else if (tool == 'goma') {
+                ctx.beginPath();
+                ctx.moveTo(mouse.x, mouse.y);
                 onErase();
             }
         };
@@ -104,20 +114,6 @@ window.addEventListener(
             'mousedown',
             e => {
                 obtenirPosicioCursorAmbStartMouse();
-
-                if (tool == 'pincell' || tool == 'goma') {
-                    ctx.beginPath();
-                    ctx.moveTo(mouse.x, mouse.y);
-                } else if (tool == 'linia') {
-                    canvas.addEventListener('mousemove', onPaintLinia, false);
-                } else if (tool == 'cercle') {
-                    canvas.addEventListener('mousemove', onPaintCercle, false);
-                } else if (tool == 'rectangle') {
-                    canvas.addEventListener('mousemove', onPaintRect, false);
-                } else if (tool == 'text') {
-                    canvas.addEventListener('mousedown', dibuixaText, false);
-                }
-
                 canviaColor(); // per assegurar-nos de que sempre té el color escollit al color-picker
                 onPaint();
             },
@@ -136,9 +132,8 @@ window.addEventListener(
                 } else if (tool == 'rectangle') {
                     canvas.removeEventListener('mousemove', onPaintRect, false);
                 } else if (tool == 'text') {
-                    canvas.removeEventListener('mousedown', dibuixaText, false);
+                    canvas.removeEventListener('mousemove', dibuixaText, false);
                 }
-                //canvas.removeEventListener('mousemove', obtenirPosicioCursor, false);
 
                 // dibuixar en el canvas final i netejar el temporal
                 ctx.drawImage(tmpCanvas, 0, 0);
@@ -181,113 +176,61 @@ window.addEventListener(
             // i després la coordinada fins on es fa el drag
             // finalment pinta la linia
 
-            // pq es vegi el recorregut:
-            // EN EVENT MOUSEMOVE
-            // comprovar diferència entre mouse.x/mouse.y i lastMouse.x/lastMouse.y
-            // si es diferent, esborrar últim traç 
-            // dibuixar un nou traç
-            // guardar les noves coords a lastMouse
+            // sempre es neteja el canvas temporal abans de dibuixar
+            // (per assegurar-nos que està net sempre)
+            tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
 
-            // S'HAURIA DE FER AMB UN CANVAS TEMPORAL!! ^^^^^
-            // pq aixi cada cop que canvien les lastmouse i mouse coords
-            // es neteja tot el canvas temp i es redibuixa
-            // sense que afecti el canvas principal
-
-            // com onPaint esta assignat a mousemove d'abans
-            // torna a entrar tota la estona a onPaintLinia
-
-
-
-            // Si faig un onPaint en el event de mouseUp (el general)
-            // fa bé la línia pero no el pincell
-
-            let pintaLinia = () => {
-                // recull la posició inicial del cursor
-                obtenirPosicioCursorAmbStartMouse();
-
-                ctx.beginPath();
-                ctx.moveTo(startMouse.x, startMouse.y);
-            };
-
-            canvas.addEventListener('mousedown', pintaLinia, false);
-            //canvas.addEventListener('mousemove', arrossegaLinia, false);
-            canvas.addEventListener('mouseup', (e) => {
-                canvas.removeEventListener('mousedown', pintaLinia, false);
-                obtenirPosicioCursor();
-                ctx.lineTo(mouse.x, mouse.y);
-                ctx.stroke();
-            }, false);
+            tmpCtx.beginPath();
+            tmpCtx.moveTo(startMouse.x, startMouse.y);
+            tmpCtx.lineTo(mouse.x, mouse.y);
+            tmpCtx.stroke();
+            tmpCtx.closePath();
         };
 
         // CERCLE
         let onPaintCercle = () => {
-            console.log('onPaintCercle');
-
+            // sempre es neteja el canvas temporal abans de dibuixar
+            // (per assegurar-nos que està net sempre)
             tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
-            console.log('Temp canvas cleared');
 
             let x = (mouse.x + startMouse.x) / 2;
             let y = (mouse.y + startMouse.y) / 2;
-            console.log(`x: ${x}, y: ${y}`);
-            console.log(`mouse.x: ${mouse.x}, mouse.y: ${mouse.y}`);
-            console.log(`startMouse.x: ${startMouse.x}, startMouse.y: ${startMouse.y}`);
 
             let radi = Math.max(
                 Math.abs(mouse.x - startMouse.x),
                 Math.abs(mouse.y - startMouse.y)) / 2;
 
-            console.log(`mouse.x - startMouse.x: ${mouse.x - startMouse.x}`);            
-            console.log(`mouse.y - startMouse.y: ${mouse.y - startMouse.y}`);
-
             tmpCtx.beginPath();
             tmpCtx.arc(x, y, radi, 0, Math.PI * 2, false);
             tmpCtx.stroke();
             tmpCtx.closePath();
-
-            console.log('done painting circle');
-            /*let pintaCercle = () => {
-              ctx.beginPath();
-              ctx.arc(mouse.x, mouse.y, 50, 0, 2 * Math.PI);
-              ctx.stroke();
-            };
-      
-            canvas.addEventListener('mousedown', pintaCercle, false);
-      
-            canvas.addEventListener(
-              'mouseup',
-              () => {
-                canvas.removeEventListener('mousedown', pintaCercle, false);
-              },
-              false
-            );
-            */
         };
 
         // RECTANGLE
         let onPaintRect = () => {
-            console.log('onPaintRect');
-            console.log(`coords: ${mouse.x} , ${mouse.y}`);
+            // sempre es neteja el canvas temporal abans de dibuixar
+            // (per assegurar-nos que està net sempre)
+            tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
 
-            let pintaRectangle = () => {
-                ctx.rect(mouse.x, mouse.y, 150, 100);
-                ctx.stroke();
-            };
-
-            canvas.addEventListener('mousedown', pintaRectangle, false);
-
-            canvas.addEventListener(
-                'mouseup',
-                () => {
-                    canvas.removeEventListener('mousedown', pintaRectangle, false);
-                },
-                false
-            );
+            let x = Math.min(mouse.x, startMouse.x);
+            let y = Math.min(mouse.y, startMouse.y);
+            let width = Math.abs(mouse.x - startMouse.x);
+            let height = Math.abs(mouse.y - startMouse.y);
+            tmpCtx.strokeRect(x, y, width, height);
         };
 
         let dibuixaText = () => {
-            canvas.addEventListener('mousedown', () => {
-                ctx.font = '40px non-serif';
+            console.log('dibuixaText');
+            let afegeixText = () => {
+                ctx.font = '40px sans-serif';
                 ctx.fillText('Hello World', mouse.x, mouse.y);
+                console.log('afegeixText');
+            };
+
+            canvas.addEventListener('mousedown', afegeixText, false);
+            canvas.addEventListener('mouseup', () => {
+                canvas.addEventListener('mousedown', afegeixText, false);
+                console.log('mouseup remove mdw');
             }, false);
         };
 

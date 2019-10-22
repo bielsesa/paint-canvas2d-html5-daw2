@@ -21,9 +21,7 @@ window.addEventListener(
         // dels canvas
         // getComputedStyle recull les característiques del div (alçada, amplada)
         let painting = document.getElementById('paint');
-        let paintStyle = getComputedStyle(painting);
-
-        
+        let paintStyle = getComputedStyle(painting);        
 
         // s'assignen els valors d'alçada i amplada
         canvas.width = parseInt(paintStyle.getPropertyValue('width'));
@@ -36,7 +34,7 @@ window.addEventListener(
         tmpCanvas.height = canvas.height;
         canvas.parentNode.insertBefore(tmpCanvas, canvas);
         
-        // valors per defecte pel tipus de traç
+        // valors per defecte pel tipus de traç (mida, color, etc)
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 3;
         ctx.lineJoin = 'round';
@@ -51,6 +49,11 @@ window.addEventListener(
         let mouse = { x: 0, y: 0 };
         let startMouse = { x: 0, y: 0 };
         let puntsCursor = [];
+
+        // creació d'un element text area per afegir 
+        let areaText = document.createElement('textarea');
+        areaText.id = 'eina-text';
+        painting.appendChild(areaText);
 
         // l'eina per defecte és el pincell
         let tool = 'pincell';
@@ -253,9 +256,10 @@ window.addEventListener(
             tmpCtx.strokeRect(x, y, width, height);
         };
 
+        // TEXT
         let dibuixaText = () => {
             console.log('dibuixaText');
-            let afegeixText = () => {
+            /*let afegeixText = () => {
                 ctx.font = '40px sans-serif';
                 ctx.fillText('Hello World', mouse.x, mouse.y);
                 console.log('afegeixText');
@@ -265,7 +269,11 @@ window.addEventListener(
             canvas.addEventListener('mouseup', () => {
                 canvas.addEventListener('mousedown', afegeixText, false);
                 console.log('mouseup remove mdw');
-            }, false);
+            }, false);*/
+
+            
+
+
         };
 
         // GOMA D'ESBORRAR
@@ -365,6 +373,9 @@ window.addEventListener(
         document
             .getElementById('btn-goma')
             .addEventListener('click', () => (tool = 'goma'), false);
+        document.
+        getElementById('btn-pujar-imatge')
+        .addEventListener('change', pujarImatge, false);
         document.
         getElementById('btn-pujar-imatge')
         .addEventListener('change', pujarImatge, false);

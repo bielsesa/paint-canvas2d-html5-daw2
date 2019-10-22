@@ -97,7 +97,7 @@ footer {
     height: 500px;
     margin: 10px;
     position: relative;
-    width: 1000px;
+    width: 900px;
 }
 
 #paint canvas {
@@ -156,6 +156,16 @@ footer {
 
 .icon:active {
     border: 3px solid white;
+}
+
+#eina-text {
+    position: absolute;
+    border: 1px dashed black;
+    outline: 0;
+    display: none;
+    font: 10px 'Lato';
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 /*****  CANVAS  *****/

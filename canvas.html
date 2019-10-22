@@ -26,10 +26,13 @@
           <img class="icon" src="img/icon-text.png" id="btn-text" />
           <img class="icon" src="img/icon-goma.png" id="btn-goma" />
           <img class="icon" src="img/icon-neteja.png" id="btn-neteja" />
-          <a href="#" id="a-descarrega" download="imatge.png">
+          <a href="#" id="a-descarrega">
             <img class="icon" src="img/icon-guardar.png" id="btn-guardar" />
           </a>
           <input type="file" id="btn-pujar-imatge">
+          <button class="icon" id="btn-invertir">Invertir</button>
+          <button class="icon" id="btn-grisos">Grisos</button>
+          <button class="icon" id="btn-blur">Blur</button>
         </div>
         <div id="paint">
           <canvas id="area-dibuix"></canvas>
@@ -37,7 +40,6 @@
         <div id="opcions-eina-actual">
           Mida línia: <span id="valor-mida-pincell">3</span>
           <input type="range" id="mida-pincell" min="1" max="100" value="3" />
-          <!-- FER SPAN DESPRÉS DEL TEXT PER PODER POSAR LA MIDA ACTUAN DE LA LÍNIA -->
           Color:
           <input
             class="icon"

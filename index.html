@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Aplicació Paint - Index</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="scriptindex.js"></script>
 </head>
 
 <body>
@@ -19,29 +20,46 @@
         <div id="informacio">
             <h4>Hola!</h4>
             <p>
-                Aquesta pàgina web és un projecte del curs de Desenvolupament d'Aplicacions Web de l'Escola de Jesuïtes El Clot.<br>
+                Aquesta pàgina web és un projecte del curs de Desenvolupament d'Aplicacions Web de l'Escola de Jesuïtes
+                El Clot.<br>
                 Conté una petita aplicació que representa una mena de Paint, directament al teu navegador web!
                 Encara no està complerta i té bastants bugs &#x1F41E;, però ja es pot probar una mica.
                 Aquí poso la llista d'eines que tenim planejat implementar, i també l'estat de la seva implementació:
             </p>
             <ul>
-                <li>
-                    Pincell
+                <li>Pincell <img src="/img/icon-verd.png"></li> 
+                <li>Línia recta <img src="/img/icon-verd.png"></li>
+                <li>Cercle <img src="/img/icon-verd.png"></li>
+                <li>Rectangle <img src="/img/icon-verd.png"></li>
+                <li>Canviar el color del traç <img src="/img/icon-verd.png"></li>
+                <li>Canviar la mida del traç <img src="/img/icon-verd.png"></li>
+                <li>Opció de guardar la teva obra d'art!! <img src="/img/icon-verd.png"></li>
+                <li>Goma d'esborrar <img src="/img/icon-verd.png"></li>
+                <li>Netejar tota l'àrea de dibuix <img src="/img/icon-verd.png"></li>
+                <li>Efectes aplicables a la imatge 
                     <ul>
-                        <li>Canviar el color del traç</li>
-                        <li>Canviar la mida del traç</li>
+                        <li>Blanc i negre <img src="/img/icon-vermell.png"></li>
+                        <li>Grisos <img src="/img/icon-vermell.png"></li>
+                        <li>Blur <img src="/img/icon-vermell.png"></li>
                     </ul>
                 </li>
-                <li>Línia recta</li>
-                <li>Cercle</li>
-                <li>Rectangle</li>
-                <li>Opció de guardar la teva obra d'art!!</li>
-                <li>Goma d'esborrar</li>
-                <li>Netejar tota l'àrea de dibuix</li>
             </ul>
         </div>
         <div id="video-informatiu">
-            <video width="320" height="240" controls></video>
+            <video id="video" width="640" height="365">
+                <source src="" type="">
+                <p>
+                    El teu navegador no suporta vídeo HTML5.
+                    Pots <a href="">descarregar-lo</a> si vols!
+                </p>
+            </video>
+            <div id="controls-video">
+                <button type="button" id="play-pause"><img class="control-icon" src="img/play-button.png"></button>
+                <input type="range" id="seek-bar" value="0">
+                <button type="button" id="mute"><img class="control-icon" src="img/volume-button.png"></button>
+                <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">
+                <button type="button" id="full-screen"><img class="control-icon" src="img/full-button.png"></button>
+            </div>
         </div>
     </div>
     <footer>

@@ -50,7 +50,7 @@ window.addEventListener(
         let startMouse = { x: 0, y: 0 };
         let puntsCursor = [];
 
-        // creació d'un element text area per afegir 
+        // creació d'un element text area per afegir text (eina)
         let areaText = document.createElement('textarea');
         areaText.id = 'eina-text';
         painting.appendChild(areaText);
@@ -140,6 +140,46 @@ window.addEventListener(
                     canvas.removeEventListener('mousemove', onPaintRect, false);
                 } else if (tool == 'text') {
                     canvas.removeEventListener('mousemove', dibuixaText, false);
+
+                    let lines = areaText.value.split('\n');
+                    let processedLines = [];
+        
+                    let tmpTextCtn = document.createElement('div');
+                    tmpTextCtn.style.display = 'none';
+                    painting.appendChild(tmpTextCtn);
+        
+                    for (let i = 0; i < lines.length; j++) {
+                        let textNode = document.createTextNode(lines[i][j]);
+                        tmpCtx.appendChild(textNode);
+        
+                        tmpTextCtn.style.position = 'absolute';
+                        tmpTextCtn.style.visibility = 'hidden';
+                        tmpTextCtn.style.display = 'block';
+        
+                        let width = tmpTextCtn.style.offsetWidth;
+                        let height = tmpTextCtn.style.offsetHeight;
+        
+                        tmpTextCtn.style.position = '';
+                        tmpTextCtn.style.visibility = '';
+                        tmpTextCtn.style.display = 'none';
+        
+                        if (width > parseInt(areaText.style.width)) {
+                            break;
+                        }                
+                    }
+        
+                    processedLines.push(tmpTextCtn.textContent);
+                    tmpTextCtn.innerHTML = '';
+
+                    for (let n = 0; n < processedLines.length; n++) {
+                        let processedLines = processedLines[n];
+
+                        tmpCtx.fillText(
+                            processedLines,
+                            parseInt(areaText.style.left),
+                            parseInt(areaText.style.top) + n * parseInt(fs)
+                        );
+                    }
                 }
 
                 // dibuixar en el canvas final i netejar el temporal
@@ -148,6 +188,10 @@ window.addEventListener(
 
                 // retornar a 0 l'array de punts del cursor
                 puntsCursor = [];
+
+                //
+                areaText.style.display = 'none';
+                areaText.value = '';
             },
             false
         );
@@ -259,21 +303,22 @@ window.addEventListener(
         // TEXT
         let dibuixaText = () => {
             console.log('dibuixaText');
-            /*let afegeixText = () => {
-                ctx.font = '40px sans-serif';
-                ctx.fillText('Hello World', mouse.x, mouse.y);
-                console.log('afegeixText');
-            };
 
-            canvas.addEventListener('mousedown', afegeixText, false);
-            canvas.addEventListener('mouseup', () => {
-                canvas.addEventListener('mousedown', afegeixText, false);
-                console.log('mouseup remove mdw');
-            }, false);*/
+            tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+
+            let x = Math.min(mouse.x, startMouse.x);
+            let y = Math.min(mouse.y, startMouse.y);
+            let width = Math.abs(mouse.x - startMouse.x);
+            let height = Math.abs(mouse.y - startMouse.y);
+
+            areaText.style.left = x + 'px';
+            areaText.style.top = y + 'px';
+            areaText.style.width = width + 'px';
+            areaText.style.height = height + 'px';
+
+            areaText.style.display = 'block';
 
             
-
-
         };
 
         // GOMA D'ESBORRAR
@@ -308,6 +353,7 @@ window.addEventListener(
         };
 
         // GUARDAR CANVAS COM A IMATGE
+        // ****** es podria preguntar el nom de l'arxiu amb un prompt
         let guardarComImatge = () => {
             document.getElementById('a-descarrega').download = 'imatge.png';
             document.getElementById('a-descarrega').href = document

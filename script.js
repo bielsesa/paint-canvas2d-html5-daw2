@@ -55,6 +55,16 @@ window.addEventListener(
     areaText.id = "eina-text";
     painting.appendChild(areaText);
 
+    areaText.addEventListener('mouseup', () => {
+        canvas.removeEventListener("mousemove", dibuixaText, false);
+    }, false);
+
+    // creació d'un element container per calcular les línies/caràcters
+    // del text afegit
+    let tmpTxtCtn = document.createElement("div");
+    tmpTxtCtn.style.display = "none";
+    painting.appendChild(tmpTxtCtn);
+
     // variable global pel ratio per l'efecte de blur
     let ratioBlur = 2;
 
@@ -144,55 +154,62 @@ window.addEventListener(
         } else if (tool == "text") {
           canvas.removeEventListener("mousemove", dibuixaText, false);
 
-          let lines = areaText.value.split("\n");
-          let processedLines = [];
+          let linies = areaText.value.split("\n");
+          let liniesProcessades = [];
 
-          let tmpTextCtn = document.createElement("div");
-          tmpTextCtn.style.display = "none";
-          painting.appendChild(tmpTextCtn);
+          for (let i = 0; i < linies.length; i++) {
+            let caracters = linies[i].length;
 
-          for (let i = 0; i < lines.length; j++) {
-            let textNode = document.createTextNode(lines[i][j]);
-            tmpCtx.appendChild(textNode);
+            for (let j = 0; j < caracters; j++) {
+              let nodeText = document.createTextNode(linies[i][j]);
+              tmpTxtCtn.appendChild(nodeText);
 
-            tmpTextCtn.style.position = "absolute";
-            tmpTextCtn.style.visibility = "hidden";
-            tmpTextCtn.style.display = "block";
+              tmpTxtCtn.style.position = "absolute";
+              tmpTxtCtn.style.visibility = "hidden";
+              tmpTxtCtn.style.display = "block";
 
-            let width = tmpTextCtn.style.offsetWidth;
-            let height = tmpTextCtn.style.offsetHeight;
+              let width = tmpTxtCtn.offsetWidth;
+              let height = tmpTxtCtn.offsetHeight;
 
-            tmpTextCtn.style.position = "";
-            tmpTextCtn.style.visibility = "";
-            tmpTextCtn.style.display = "none";
+              tmpTxtCtn.style.position = "";
+              tmpTxtCtn.style.visibility = "";
+              tmpTxtCtn.style.display = "none";
 
-            if (width > parseInt(areaText.style.width)) {
-              break;
+              if (width > parseInt(areaText.style.width)) {
+                break;
+              }
             }
+
+            liniesProcessades.push(tmpTxtCtn.textContent);
+            tmpTxtCtn.innerHTML = "";
           }
 
-          processedLines.push(tmpTextCtn.textContent);
-          tmpTextCtn.innerHTML = "";
+          let areaTextCompStyle = getComputedStyle(areaText);
+          let midaFont = areaTextCompStyle.getPropertyValue("font-size");
+          let tipoFont = areaTextCompStyle.getPropertyValue("font-family");
 
-          for (let n = 0; n < processedLines.length; n++) {
-            let processedLines = processedLines[n];
+          tmpCtx.font = midaFont + " " + tipoFont;
+          tmpCtx.textBaseline = "top";
+
+          for (let n = 0; n < liniesProcessades.length; n++) {
+            let liniaProcessada = liniesProcessades[i];
 
             tmpCtx.fillText(
-              processedLines,
+              liniaProcessada,
               parseInt(areaText.style.left),
-              parseInt(areaText.style.top) + n * parseInt(fs)
+              parseInt(areaText.style.top) + n * parseInt(midaFont)
             );
           }
         }
 
-        // dibuixar en el canvas final i netejar el temporal
+        // es dibuixa en el canvas final i es neteja el temporal
         ctx.drawImage(tmpCanvas, 0, 0);
         tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
 
-        // retornar a 0 l'array de punts del cursor
+        // es retorna a 0 l'array de punts del cursor
         puntsCursor = [];
 
-        //
+        // s'amaga el textarea per l'eina de text
         areaText.style.display = "none";
         areaText.value = "";
       },
@@ -428,28 +445,35 @@ window.addEventListener(
           let contador = 0;
 
           let dadesPixelsPropers = [
-            i - tempW - 4, i - tempW, i - tempW + 4, // pixels de dalts
-            i - 4, i + 4, // pixels de la meitat
-            i + tempW - 4, i + tempW, i + tempW + 4
+            i - tempW - 4,
+            i - tempW,
+            i - tempW + 4, // pixels de dalts
+            i - 4,
+            i + 4, // pixels de la meitat
+            i + tempW - 4,
+            i + tempW,
+            i + tempW + 4
           ];
 
           // calcula la suma dels valors de tots els pixels propers
           for (let j = 0; j < dadesPixelsPropers.length; j++) {
-              if (dadesPixelsPropers[j] >= 0 &&
-                dadesPixelsPropers[j] <= dades.length - 3) {
-                    sumaOpacitat += dades[dadesPixelsPropers[j]];
-                    sumaVermell += dades[dadesPixelsPropers[j] + 1];
-                    sumaVerd += dades[dadesPixelsPropers[j] + 2];
-                    sumaBlau += dades[dadesPixelsPropers[j] + 3];
-                    contador++;
-                }
+            if (
+              dadesPixelsPropers[j] >= 0 &&
+              dadesPixelsPropers[j] <= dades.length - 3
+            ) {
+              sumaOpacitat += dades[dadesPixelsPropers[j]];
+              sumaVermell += dades[dadesPixelsPropers[j] + 1];
+              sumaVerd += dades[dadesPixelsPropers[j] + 2];
+              sumaBlau += dades[dadesPixelsPropers[j] + 3];
+              contador++;
+            }
           }
 
           // s'apliquen els valors mitjans
           dades[i] = (sumaOpacitat / contador) * 0.99;
           dades[i + 1] = (sumaVermell / contador) * 0.99;
           dades[i + 2] = (sumaVerd / contador) * 0.99;
-          dades[i + 3] = (sumaBlau / contador);
+          dades[i + 3] = sumaBlau / contador;
         }
       }
 

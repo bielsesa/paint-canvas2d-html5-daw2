@@ -15,7 +15,7 @@
     <div id="contingut">
       <nav>
         <a id="nav-home" href="index.html">Pàgina principal</a>
-        <a id="nav-canvas" href="canvas.html">LET'S GET TO IT</a>
+        <a id="nav-canvas" href="canvas.html">Paint</a>
       </nav>
       <div id="aplicacio">
         <div id="opcions-eines">
@@ -39,14 +39,28 @@
         </div>
         <div id="opcions-eina-actual">
           Mida línia: <span id="valor-mida-pincell">3</span>
-          <input type="range" id="mida-pincell" min="1" max="100" value="3" />
+          <input type="range" id="mida-pincell" min="1" max="100" value="3" /><br>
           Color:
           <input
             class="icon"
             type="color"
             id="btn-color-pick"
             placeholder="#000"
-          />
+          /><br>
+          Mida lletra: 
+          <select name="mida-font">
+            <option value="10">10</option>
+            <option value="12" selected>12</option>
+            <option value="16">16</option>
+            <option value="18">18</option>
+            <option value="22">22</option>
+          </select><br>
+          Tipografia:
+          <select name="tipo-font"> <!-- posar spans per canviar la font-family de cada? -->
+            <option value="Lato">Lato</option>
+            <option value="Montserrat" selected>Montserrat</option> 
+            <option value="Nunito">Nunito</option>
+          </select><br>
         </div>
       </div>
     </div>

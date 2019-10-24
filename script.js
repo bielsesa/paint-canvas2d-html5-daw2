@@ -445,14 +445,9 @@ window.addEventListener(
           let contador = 0;
 
           let dadesPixelsPropers = [
-            i - tempW - 4,
-            i - tempW,
-            i - tempW + 4, // pixels de dalts
-            i - 4,
-            i + 4, // pixels de la meitat
-            i + tempW - 4,
-            i + tempW,
-            i + tempW + 4
+            i - tempW - 4, i - tempW, i - tempW + 4, // pixels de dalt
+            i - 4, i + 4, // pixels de la meitat
+            i + tempW - 4, i + tempW, i + tempW + 4 // pixels d'abaix
           ];
 
           // calcula la suma dels valors de tots els pixels propers

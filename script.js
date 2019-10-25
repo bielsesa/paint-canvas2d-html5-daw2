@@ -509,9 +509,9 @@ window.addEventListener(
     document
       .getElementById("btn-goma")
       .addEventListener("click", () => (tool = "goma"), false);
-    document
+    /*document
       .getElementById("btn-pujar-imatge")
-      .addEventListener("change", pujarImatge, false);
+      .addEventListener("change", pujarImatge, false);*/
     document
       .getElementById("btn-invertir")
       .addEventListener("click", invertirColors, false);

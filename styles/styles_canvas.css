@@ -1,0 +1,104 @@
+
+#contingut-grid {
+    display: grid;
+    grid-template-columns: auto 3fr;
+    grid-template-rows: auto 1fr auto;
+}
+
+#aplicacio {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto;
+}
+
+#paint {
+    background: white;
+    border: solid 2px black;
+    float: left;
+    height: 500px;
+    margin: 10px;
+    position: relative;
+    width: 900px;
+}
+
+#paint canvas {
+    background: transparent;
+    cursor: crosshair/*url(img/icon-pincell.png), auto*/;
+    left: 0;
+    position: absolute;
+    top: 0;
+}
+
+#aplicacio button {
+    top: 15px;
+    width: 80px;
+}
+
+.caixa-eines-canvas {
+    background: #f7eaea;
+    border: solid 1px black;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 5px;
+}
+
+#accions {
+    grid-column: 1 / span 3;
+    grid-row: 1 / span 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    width: 400px;
+}
+
+#accions img, button, a {
+    background: transparent;
+}
+
+#eines {
+    width: 35px;
+    height: 205px;
+}
+
+#eines img, button {
+    display: block;
+}
+
+#opcions-eina-actual {
+    width: 180px;    
+}
+
+#opcions-eina-actual span, img {
+    background: transparent;
+}
+
+#mida-pincell {
+    margin: 5px;
+}
+
+.icon {
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+.icon:hover {
+    border: 2px solid black;
+}
+
+.icon:active {
+    border: 3px solid white;
+}
+
+.eina-seleccionada {
+    background: rgb(174, 241, 193);
+}
+
+#eina-text {
+    position: absolute;
+    border: 1px dashed black;
+    outline: 0;
+    display: none;
+    font: 10px 'Lato';
+    overflow: hidden;
+    white-space: nowrap;
+}

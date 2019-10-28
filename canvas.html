@@ -1,79 +1,86 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <title>Aplicació Paint - Canvas</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="script.js"></script>
-  </head>
+    <link rel="stylesheet" href="styles/styles_general.css" />
+    <link rel="stylesheet" href="styles/styles_canvas.css" />
+    <script src="scripts/script_canvas.js"></script>
+</head>
 
-  <body>
-    <header>
-      <h1>Aplicació Paint amb Canvas 2D</h1>
-      <h3>Projecte de HTML5 de DAW2</h3>
-    </header>
-    <div id="contingut">
-      <nav>
-        <a id="nav-home" href="index.html">Pàgina principal</a>
-        <a id="nav-canvas" href="canvas.html">Paint</a>
-      </nav>
-      <div id="aplicacio">
-        <div id="accions" class="caixa-eines-canvas">
-            <button class="icon" id="btn-desfer">Desfer</button>
-            <img class="icon" src="img/icon-neteja.png" id="btn-neteja" />
-            <a href="#" id="a-descarrega">
-              <img class="icon" src="img/icon-guardar.png" id="btn-guardar" />
-            </a>
-            <!--<input type="file" id="btn-pujar-imatge">-->  
-            <button class="icon" id="btn-invertir">Invertir</button>
-            <button class="icon" id="btn-grisos">Grisos</button>
-            <button class="icon" id="btn-blur">Blur</button>
+<body>
+    <div class="wrapper">
+        <div id="contingut-grid">
+
+            <header id="capcelera">
+                <h1>Aplicació Paint amb Canvas 2D</h1>
+                <h3>Projecte de HTML5 de DAW2</h3>
+            </header>
+
+            <nav id="menu">
+                <a id="nav-home" href="index.html">Pàgina principal</a>
+                <a id="nav-canvas" href="canvas.html">Paint</a>
+            </nav>
+
+            <div id="aplicacio">
+                <div id="accions" class="caixa-eines-canvas">
+                    <img class="icon" src="img/icon-desfer.png" id="btn-desfer">
+                    <img class="icon" src="img/icon-neteja.png" id="btn-neteja" />
+                    <a href="#" id="a-descarrega">
+                        <img class="icon" src="img/icon-guardar.png" id="btn-guardar" />
+                    </a>
+                    <!--<input type="file" id="btn-pujar-imatge">-->
+                    <button class="icon" id="btn-invertir">Invertir</button>
+                    <button class="icon" id="btn-grisos">Grisos</button>
+                    <button class="icon" id="btn-blur">Blur</button>
+                </div>
+                <div id="eines" class="caixa-eines-canvas">
+                    <img class="icon eina" src="img/icon-pincell.png" id="btn-pincell" />
+                    <img class="icon eina" src="img/icon-linia.png" id="btn-linia" />
+                    <img class="icon eina" src="img/icon-cercle.png" id="btn-cercle" />
+                    <img class="icon eina" src="img/icon-rect.png" id="btn-rectangle" />
+                    <img class="icon eina" src="img/icon-text.png" id="btn-text" />
+                    <img class="icon eina" src="img/icon-goma.png" id="btn-goma" />
+                </div>
+                <div id="paint">
+                    <canvas id="area-dibuix"></canvas>
+                </div>
+                <div id="opcions-eina-actual">
+                    <div id="atributs-punts" class="caixa-eines-canvas">
+                        Mida línia: <span id="valor-mida-pincell">3</span>
+                        <input type="range" id="mida-pincell" min="1" max="100" value="3" /><br>
+                        Color:
+                        <input class="icon" type="color" id="btn-color-pick" placeholder="#000" /><br>
+                        <img id="opcio-fill" src="img/icon-radiobtn.png"> Fill  
+                    </div>
+                    <div id="atributs-text" class="caixa-eines-canvas">
+                        Mida lletra:
+                        <select name="mida-font">
+                            <option value="10">10</option>
+                            <option value="12" selected>12</option>
+                            <option value="16">16</option>
+                            <option value="18">18</option>
+                            <option value="22">22</option>
+                        </select><br>
+                        Tipografia:
+                        <select name="tipo-font">
+                            <!-- posar spans per canviar la font-family de cada? -->
+                            <option value="Lato">Lato</option>
+                            <option value="Montserrat" selected>Montserrat</option>
+                            <option value="Nunito">Nunito</option>
+                        </select><br>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="eines" class="caixa-eines-canvas">
-          <img class="icon eina" src="img/icon-pincell.png" id="btn-pincell" />
-          <img class="icon eina" src="img/icon-linia.png" id="btn-linia" />
-          <img class="icon eina" src="img/icon-cercle.png" id="btn-cercle" />
-          <img class="icon eina" src="img/icon-rect.png" id="btn-rectangle" />
-          <img class="icon eina" src="img/icon-text.png" id="btn-text" />
-          <img class="icon eina" src="img/icon-goma.png" id="btn-goma" />          
-        </div>
-        <div id="paint">
-          <canvas id="area-dibuix"></canvas>
-        </div>
-        <div id="opcions-eina-actual">
-          <div id="atributs-punts" class="caixa-eines-canvas">
-              Mida línia: <span id="valor-mida-pincell">3</span>
-              <input type="range" id="mida-pincell" min="1" max="100" value="3" /><br>
-              Color:
-              <input
-                class="icon"
-                type="color"
-                id="btn-color-pick"
-                placeholder="#000"
-              /><br>
-          </div>          
-          <div id="atributs-text" class="caixa-eines-canvas">
-              Mida lletra: 
-              <select name="mida-font">
-                <option value="10">10</option>
-                <option value="12" selected>12</option>
-                <option value="16">16</option>
-                <option value="18">18</option>
-                <option value="22">22</option>
-              </select><br>
-              Tipografia:
-              <select name="tipo-font"> <!-- posar spans per canviar la font-family de cada? -->
-                <option value="Lato">Lato</option>
-                <option value="Montserrat" selected>Montserrat</option> 
-                <option value="Nunito">Nunito</option>
-              </select><br>
-          </div>
-          
-        </div>
-      </div>
     </div>
-    <footer>
-      Biel Serrano Sánchez, Escola Jesuïtes El Clot DAW2, 2019
+
+    <footer id="peu" class="sticky-footer">
+        <div class="center">
+            <p>Biel Serrano Sánchez, Escola Jesuïtes El Clot DAW2, 2019</p>
+        </div>
     </footer>
-  </body>
+</body>
+
 </html>

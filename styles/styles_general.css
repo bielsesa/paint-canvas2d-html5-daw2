@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css?family=Lato|Montserrat|Nunito&display=swap');
+
+* {
+    background: #f1d4d4;
+    margin: 0;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+}
+html, body {
+    height: 100%;
+}
+
+.wrapper {
+    min-height: 100%;
+    margin-bottom: -50px;
+}
+
+.wrapper:after {
+    content: "";
+    display: block;
+}
+
+.sticky-footer, .wrapper:after {
+    height: 50px;
+}
+
+.sticky-footer {
+    background: transparent;
+    color: #715a7a;
+    text-align: center;
+}
+
+#capcelera {
+    grid-column: 1 / span 2;
+}
+
+#menu {
+    background: #484c7f;
+    border-radius: 5px;
+    color: #f1d4d4;
+    float: left;
+    font-family: 'Montserrat', sans-serif;
+    grid-column: 1 / span 1;
+    height: 100px;
+    margin: 1em;
+    top: 5px;      
+}
+
+#menu a {    
+    background: transparent;
+    border: solid 2px white;
+    color: #f1d4d4;
+    display: block;
+    padding: 10px;
+    margin: 5px;
+}
+
+#menu a:link {
+    text-decoration: none;
+}
+
+#menu a:active {
+    color: #b599c2;
+}
+
+h1 {
+    color: #484c7f;
+    margin: 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 3em;
+    font-weight: 800;
+    text-align: center;
+}
+
+h3 {
+    color: #2c2f4e;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    text-align: center;
+}
+
+.center {
+    height: 50px;
+    position: relative;  
+}
+
+.center p {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}

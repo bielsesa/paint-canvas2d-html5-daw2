@@ -3,56 +3,56 @@
 // Curs 2019-20
 
 window.addEventListener(
-  'load',
+  "load",
   () => {
     // comprova si el navegador és compatible amb canvas
     try {
-      document.createElement('canvas').getContext('2d');
+      document.createElement("canvas").getContext("2d");
     } catch (e) {
-      document.getElementById('area-dibuix').innerHTML =
-        'HTML5 Canvas no suportat.';
+      document.getElementById("area-dibuix").innerHTML =
+        "HTML5 Canvas no suportat.";
     }
 
     /**************** INICIALITZACIÓ CANVAS ****************/
     // recull el canvas i el context del HTML
-    let canvas = document.getElementById('area-dibuix');
-    let ctx = canvas.getContext('2d');
+    let canvas = document.getElementById("area-dibuix");
+    let ctx = canvas.getContext("2d");
 
     // recull el div contenidor dels canvas per calcular la mida
     // dels canvas
     // getComputedStyle recull les característiques del div (alçada, amplada)
-    let painting = document.getElementById('paint');
+    let painting = document.getElementById("paint");
     let paintStyle = getComputedStyle(painting);
 
     // s'assignen els valors d'alçada i amplada
-    canvas.width = parseInt(paintStyle.getPropertyValue('width'));
-    canvas.height = parseInt(paintStyle.getPropertyValue('height'));
+    canvas.width = parseInt(paintStyle.getPropertyValue("width"));
+    canvas.height = parseInt(paintStyle.getPropertyValue("height"));
 
     // creació canvas temporal
-    let tmpCanvas = document.createElement('canvas');
-    let tmpCtx = tmpCanvas.getContext('2d');
+    let tmpCanvas = document.createElement("canvas");
+    let tmpCtx = tmpCanvas.getContext("2d");
     tmpCanvas.width = canvas.width;
     tmpCanvas.height = canvas.height;
     canvas.parentNode.insertBefore(tmpCanvas, canvas);
 
-    // variable per guardar una còpia del canvas 
+    // variable per guardar una còpia del canvas
     // amb l'aspecte anterior a una acció nova
     // per l'acció de DESFER
-    let copiaCanvas = document.createElement('canvas');
-    let copiaCanvasCtx = copiaCanvas.getContext('2d');
+    let copiaCanvas = document.createElement("canvas");
+    let copiaCanvasCtx = copiaCanvas.getContext("2d");
     copiaCanvas.width = canvas.width;
     copiaCanvas.height = canvas.height;
 
     // valors per defecte pel tipus de traç (mida, color, etc)
-    ctx.strokeStyle = '#000';
+    ctx.strokeStyle = "#000";
     ctx.lineWidth = 3;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
 
-    tmpCtx.strokeStyle = '#000';
+    tmpCtx.strokeStyle = "#000";
     tmpCtx.lineWidth = 3;
-    tmpCtx.lineJoin = 'round';
-    tmpCtx.lineCap = 'round';
+    tmpCtx.lineJoin = "round";
+    tmpCtx.lineCap = "round";
 
     /**************** INICIALITZACIÓ CANVAS ****************/
 
@@ -64,27 +64,27 @@ window.addEventListener(
     let puntsCursor = [];
 
     // elements temporals per l'eina de text
-    let textarea = document.createElement('textarea');
-    textarea.id = 'text_tool';
-    textarea.style.display = 'none';
+    let textarea = document.createElement("textarea");
+    textarea.id = "text_tool";
+    textarea.style.display = "none";
     painting.appendChild(textarea);
 
-    let tmpTxtCtn = document.createElement('div');
-    tmpTxtCtn.style.display = 'none';
+    let tmpTxtCtn = document.createElement("div");
+    tmpTxtCtn.style.display = "none";
     painting.appendChild(tmpTxtCtn);
 
     // event listener per l'eina de text
     // quan s'aixeca el dit del botó del ratolí
     // es deixa de fer gran la capsa de text
-    textarea.addEventListener('mouseup', (e) => {
-      canvas.removeEventListener('mousemove', onText, false);
+    textarea.addEventListener("mouseup", e => {
+      canvas.removeEventListener("mousemove", onText, false);
     });
 
     // variable global pel ratio per l'efecte de blur
     let ratioBlur = 2;
 
     // l'eina per defecte és el pincell
-    let tool = 'pincell';
+    let tool = "pincell";
 
     // opció fill per les formes geomètriques
     let fill = false;
@@ -109,37 +109,39 @@ window.addEventListener(
     };
 
     let canviaColor = () => {
-      ctx.strokeStyle = document.getElementById('btn-color-pick').value;
+      ctx.strokeStyle = document.getElementById("btn-color-pick").value;
     };
 
     let canviaMidaPincell = () => {
-      ctx.lineWidth = document.getElementById('mida-pincell').value;
-      document.getElementById('valor-mida-pincell').innerHTML = ctx.lineWidth;
+      ctx.lineWidth = document.getElementById("mida-pincell").value;
+      document.getElementById("valor-mida-pincell").innerHTML = ctx.lineWidth;
     };
 
     let onPaint = () => {
-      console.log('onPaint');
-      if (tool == 'pincell') {
-        canvas.addEventListener('mousemove', onPaintPincell, false);
+      console.log("onPaint");
+      if (tool == "pincell") {
+        canvas.addEventListener("mousemove", onPaintPincell, false);
         onPaintPincell();
-      } else if (tool == 'linia') {
-        canvas.addEventListener('mousemove', onPaintLinia, false);
+      } else if (tool == "linia") {
+        canvas.addEventListener("mousemove", onPaintLinia, false);
         onPaintLinia();
-      } else if (tool == 'cercle') {
-        canvas.addEventListener('mousemove', onPaintCercle, false);
+      } else if (tool == "cercle") {
+        canvas.addEventListener("mousemove", onPaintCercle, false);
         onPaintCercle();
-      } else if (tool == 'rectangle') {
-        canvas.addEventListener('mousemove', onPaintRect, false);
+      } else if (tool == "rectangle") {
+        canvas.addEventListener("mousemove", onPaintRect, false);
         onPaintRect();
-      } else if (tool == 'ellipse') {
-        canvas.addEventListener('mousemove', onPaintEllipse, false);
+      } else if (tool == "ellipse") {
+        canvas.addEventListener("mousemove", onPaintEllipse, false);
         onPaintEllipse();
-      } else if (tool == 'text') {
+      } else if (tool == "text") {
         obtenirPosicioCursorAmbStartMouse();
-        console.log(`startMouse.x: ${startMouse.x}, startMouse.y: ${startMouse.y}`);
-        canvas.addEventListener('mousemove', onText, false);
+        console.log(
+          `startMouse.x: ${startMouse.x}, startMouse.y: ${startMouse.y}`
+        );
+        canvas.addEventListener("mousemove", onText, false);
         onText();
-      } else if (tool == 'goma') {
+      } else if (tool == "goma") {
         ctx.beginPath();
         ctx.moveTo(mouse.x, mouse.y);
         onErase();
@@ -151,11 +153,11 @@ window.addEventListener(
     /************ EVENT LISTENERS ************/
 
     // event listener per recollir les coordinades del cursor
-    canvas.addEventListener('mousemove', obtenirPosicioCursor, false);
+    canvas.addEventListener("mousemove", obtenirPosicioCursor, false);
 
     // event listener per començar a dibuixar
     canvas.addEventListener(
-      'mousedown',
+      "mousedown",
       e => {
         obtenirPosicioCursorAmbStartMouse();
         canviaColor(); // per assegurar-nos de que sempre té el color escollit al color-picker
@@ -166,20 +168,20 @@ window.addEventListener(
 
     // event listener per deixar de dibuixar
     canvas.addEventListener(
-      'mouseup',
+      "mouseup",
       e => {
-        if (tool == 'pincell') {
-          canvas.removeEventListener('mousemove', onPaintPincell, false);
-        } else if (tool == 'linia') {
-          canvas.removeEventListener('mousemove', onPaintLinia, false);
-        } else if (tool == 'cercle') {
-          canvas.removeEventListener('mousemove', onPaintCercle, false);
-        } else if (tool == 'rectangle') {
-          canvas.removeEventListener('mousemove', onPaintRect, false);
-        } else if (tool == 'ellipse') {
-          canvas.removeEventListener('mousemove', onPaintEllipse, false);        
-        } else if (tool == 'text') {
-          let linies = textarea.value.split('\n');
+        if (tool == "pincell") {
+          canvas.removeEventListener("mousemove", onPaintPincell, false);
+        } else if (tool == "linia") {
+          canvas.removeEventListener("mousemove", onPaintLinia, false);
+        } else if (tool == "cercle") {
+          canvas.removeEventListener("mousemove", onPaintCercle, false);
+        } else if (tool == "rectangle") {
+          canvas.removeEventListener("mousemove", onPaintRect, false);
+        } else if (tool == "ellipse") {
+          canvas.removeEventListener("mousemove", onPaintEllipse, false);
+        } else if (tool == "text") {
+          let linies = textarea.value.split("\n");
           let liniesProcessades = [];
 
           for (let i = 0; i < linies.length; i++) {
@@ -189,16 +191,16 @@ window.addEventListener(
               let nodeText = document.createTextNode(linies[i][j]);
               tmpTxtCtn.appendChild(nodeText);
 
-              tmpTxtCtn.style.position = 'absolute';
-              tmpTxtCtn.style.visibility = 'hidden';
-              tmpTxtCtn.style.display = 'block';
+              tmpTxtCtn.style.position = "absolute";
+              tmpTxtCtn.style.visibility = "hidden";
+              tmpTxtCtn.style.display = "block";
 
               let width = tmpTxtCtn.offsetWidth;
               let height = tmpTxtCtn.offsetHeight;
 
-              tmpTxtCtn.style.position = '';
-              tmpTxtCtn.style.visibility = '';
-              tmpTxtCtn.style.display = 'none';
+              tmpTxtCtn.style.position = "";
+              tmpTxtCtn.style.visibility = "";
+              tmpTxtCtn.style.display = "none";
 
               if (width > parseInt(textarea.style.width)) {
                 break;
@@ -206,15 +208,15 @@ window.addEventListener(
             }
 
             liniesProcessades.push(tmpTxtCtn.textContent);
-            tmpTxtCtn.innerHTML = '';
+            tmpTxtCtn.innerHTML = "";
           }
 
           let textareaCompStyle = getComputedStyle(textarea);
-          let midaFont = textareaCompStyle.getPropertyValue('font-size');
-          let tipoFont = textareaCompStyle.getPropertyValue('font-family');
+          let midaFont = textareaCompStyle.getPropertyValue("font-size");
+          let tipoFont = textareaCompStyle.getPropertyValue("font-family");
 
-          tmpCtx.font = midaFont + ' ' + tipoFont;
-          tmpCtx.textBaseline = 'top';
+          tmpCtx.font = midaFont + " " + tipoFont;
+          tmpCtx.textBaseline = "top";
 
           for (let n = 0; n < liniesProcessades.length; n++) {
             let liniaProcessada = liniesProcessades[n];
@@ -238,8 +240,8 @@ window.addEventListener(
         puntsCursor = [];
 
         // s'amaga el textarea per l'eina de text
-        textarea.style.display = 'none';
-        textarea.value = '';
+        textarea.style.display = "none";
+        textarea.value = "";
       },
       false
     );
@@ -387,7 +389,7 @@ window.addEventListener(
 
     // TEXT
     let onText = () => {
-      console.log('onText');
+      console.log("onText");
 
       tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
 
@@ -398,34 +400,34 @@ window.addEventListener(
 
       console.log(`x: ${x}, y: ${y}, width: ${width}, height: ${height}`);
 
-      textarea.style.left = x + 'px';
-      textarea.style.top = y + 'px';
-      textarea.style.width = width + 'px';
-      textarea.style.height = height + 'px';
+      textarea.style.left = x + "px";
+      textarea.style.top = y + "px";
+      textarea.style.width = width + "px";
+      textarea.style.height = height + "px";
 
-      textarea.style.display = 'block';
+      textarea.style.display = "block";
     };
 
     // GOMA D'ESBORRAR
     let onErase = () => {
-      console.log('onErase');
+      console.log("onErase");
       console.log(`coords: ${mouse.x} , ${mouse.y}`);
 
       let esborra = () => {
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.fillStyle = 'rgba(0,0,0,1)';
-        ctx.strokeStyle = 'rgba(0,0,0,1)';
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.fillStyle = "rgba(0,0,0,1)";
+        ctx.strokeStyle = "rgba(0,0,0,1)";
         ctx.lineTo(mouse.x, mouse.y);
         ctx.stroke();
       };
 
-      canvas.addEventListener('mousemove', esborra, false);
+      canvas.addEventListener("mousemove", esborra, false);
       canvas.addEventListener(
-        'mouseup',
+        "mouseup",
         () => {
-          canvas.removeEventListener('mousemove', esborra, false);
+          canvas.removeEventListener("mousemove", esborra, false);
           ctx.closePath();
-          ctx.globalCompositeOperation = 'source-over';
+          ctx.globalCompositeOperation = "source-over";
         },
         false
       );
@@ -433,7 +435,7 @@ window.addEventListener(
 
     // DESFER L'ÚLTIMA ACCIÓ
     let desferAccio = () => {
-      console.log('Entra a desfer');
+      console.log("Entra a desfer");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(copiaCanvas, 0, 0);
     };
@@ -447,11 +449,11 @@ window.addEventListener(
     // GUARDAR CANVAS COM A IMATGE
     // ****** es podria preguntar el nom de l'arxiu amb un prompt
     let guardarComImatge = () => {
-      document.getElementById('a-descarrega').download = 'imatge.png';
-      document.getElementById('a-descarrega').href = document
-        .getElementById('area-dibuix')
-        .toDataURL('image/png')
-        .replace('/^data:image/[^;]/', 'data:application/octet-stream');
+      document.getElementById("a-descarrega").download = "imatge.png";
+      document.getElementById("a-descarrega").href = document
+        .getElementById("area-dibuix")
+        .toDataURL("image/png")
+        .replace("/^data:image/[^;]/", "data:application/octet-stream");
     };
 
     // PUJAR IMATGE D'ARXIU
@@ -498,6 +500,23 @@ window.addEventListener(
       ctx.putImageData(dadesDibuix, 0, 0);
     };
 
+    let escalaGrisos = () => {
+      let dadesDibuix = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      let dades = dadesDibuix.data;
+
+      for (let i = 0; i < dades.length; i += 4) {
+        let escalaG =
+          dades[i] * 0.99 + dades[i + 1] * 0.99 + dades[i + 2] * 0.99;
+
+        dades[i] = escalaG;
+        dades[i + 1] = escalaG;
+        dades[i + 2] = escalaG;
+      }
+      
+      // se sobreescriu el canvas original
+      ctx.putImageData(dadesDibuix, 0, 0);
+    };
+
     // EFECTE DE BLUR (DESENFOC)
     let efecteBlur = () => {
       let dadesDibuix = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -516,9 +535,14 @@ window.addEventListener(
           let contador = 0;
 
           let dadesPixelsPropers = [
-            i - tempW - 4, i - tempW, i - tempW + 4, // pixels de dalt
-            i - 4, i + 4, // pixels de la meitat
-            i + tempW - 4, i + tempW, i + tempW + 4 // pixels d'abaix
+            i - tempW - 4,
+            i - tempW,
+            i - tempW + 4, // pixels de dalt
+            i - 4,
+            i + 4, // pixels de la meitat
+            i + tempW - 4,
+            i + tempW,
+            i + tempW + 4 // pixels d'abaix
           ];
 
           // calcula la suma dels valors de tots els pixels propers
@@ -551,85 +575,102 @@ window.addEventListener(
     /************ EVENT LISTENERS DELS BOTONS ************/
 
     // eines
-    let eines = document.getElementsByClassName('eina');
-    let actualEina = lastEina = eines[0]; // el brush és l'eina inicial per defecte
+    let eines = document.getElementsByClassName("eina");
+    let actualEina = (lastEina = eines[0]); // el brush és l'eina inicial per defecte
     console.log(actualEina);
 
     let selectEina = () => {
-      lastEina.classList.remove('eina-seleccionada');
-      actualEina.classList.add('eina-seleccionada');
+      lastEina.classList.remove("eina-seleccionada");
+      actualEina.classList.add("eina-seleccionada");
       lastEina = actualEina;
-      console.log('passo per classlist add');
+      console.log("passo per classlist add");
       console.log(actualEina);
     };
 
     for (element of eines) {
       console.log(element);
-      element.addEventListener('click', () => { actualEina = element; console.log(`canviat eina:`); console.log(actualEina); }, true);
+      element.addEventListener(
+        "click",
+        () => {
+          actualEina = element;
+          console.log(`canviat eina:`);
+          console.log(actualEina);
+        },
+        true
+      );
       //element.addEventListener('click', selectEina, true);
     }
 
     document
-      .getElementById('btn-pincell')
-      .addEventListener('click', () => (tool = 'pincell'), false);
+      .getElementById("btn-pincell")
+      .addEventListener("click", () => (tool = "pincell"), false);
 
     document
-      .getElementById('btn-linia')
-      .addEventListener('click', () => (tool = 'linia'), false);
+      .getElementById("btn-linia")
+      .addEventListener("click", () => (tool = "linia"), false);
     document
-      .getElementById('btn-cercle')
-      .addEventListener('click', () => (tool = 'cercle'), false);
+      .getElementById("btn-cercle")
+      .addEventListener("click", () => (tool = "cercle"), false);
     document
-      .getElementById('btn-rectangle')
-      .addEventListener('click', () => (tool = 'rectangle'), false);
+      .getElementById("btn-rectangle")
+      .addEventListener("click", () => (tool = "rectangle"), false);
     document
-      .getElementById('btn-ellipse')
-      .addEventListener('click', () => (tool = 'ellipse'), false);
+      .getElementById("btn-ellipse")
+      .addEventListener("click", () => (tool = "ellipse"), false);
     document
-      .getElementById('btn-text')
-      .addEventListener('click', () => (tool = 'text'), false);
+      .getElementById("btn-text")
+      .addEventListener("click", () => (tool = "text"), false);
     document
-      .getElementById('btn-goma')
-      .addEventListener('click', () => (tool = 'goma'), false);
+      .getElementById("btn-goma")
+      .addEventListener("click", () => (tool = "goma"), false);
 
     // atributs eines
     document
-      .getElementById('btn-color-pick')
-      .addEventListener('change', canviaColor, false);
+      .getElementById("btn-color-pick")
+      .addEventListener("change", canviaColor, false);
     document
-      .getElementById('mida-pincell')
-      .addEventListener('change', canviaMidaPincell, false);
-    document
-      .getElementById('opcio-fill')
-      .addEventListener('click', () => {
+      .getElementById("mida-pincell")
+      .addEventListener("change", canviaMidaPincell, false);
+    document.getElementById("opcio-fill").addEventListener(
+      "click",
+      () => {
         if (!fill) {
           fill = true;
-          document.getElementById('opcio-fill').setAttribute('src', 'img/icon-radiobtn-marcat.png');
+          document
+            .getElementById("opcio-fill")
+            .setAttribute("src", "img/icon-radiobtn-marcat.png");
         } else {
           fill = false;
-          document.getElementById('opcio-fill').setAttribute('src', 'img/icon-radiobtn.png');
+          document
+            .getElementById("opcio-fill")
+            .setAttribute("src", "img/icon-radiobtn.png");
         }
-      }, true);
+      },
+      true
+    );
 
     // accions
     document
-      .getElementById('btn-desfer')
-      .addEventListener('click', desferAccio, false);
+      .getElementById("btn-desfer")
+      .addEventListener("click", desferAccio, false);
     document
-      .getElementById('a-descarrega')
-      .addEventListener('click', guardarComImatge, false);
+      .getElementById("a-descarrega")
+      .addEventListener("click", guardarComImatge, false);
     document
-      .getElementById('btn-neteja')
-      .addEventListener('click', netejaCanvas, false);
+      .getElementById("btn-neteja")
+      .addEventListener("click", netejaCanvas, false);
     /*document
       .getElementById('btn-pujar-imatge')
       .addEventListener('change', pujarImatge, false);*/
     document
-      .getElementById('btn-invertir')
-      .addEventListener('click', invertirColors, false);
+      .getElementById("btn-invertir")
+      .addEventListener("click", invertirColors, false);
     document
-      .getElementById('btn-blur')
-      .addEventListener('click', efecteBlur, false);
+      .getElementById("btn-grisos")
+      .addEventListener("click", escalaGrisos, false);
+    document
+      .getElementById("btn-blur")
+      .addEventListener("click", efecteBlur, false);
     /************ EVENT LISTENERS DELS BOTONS ************/
   },
   true

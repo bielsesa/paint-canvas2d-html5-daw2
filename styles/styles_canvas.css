@@ -70,11 +70,15 @@
 
 #eines {
     width: 35px;
-    height: 240px;
+    height: 265px;
 }
 
 #eines img, button {
     display: block;
+}
+
+#btn-color-pick {
+    width: 30px;
 }
 
 #opcions-eina-actual {

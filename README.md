@@ -8,6 +8,9 @@ Les eines que funcionen actualment (tot i que encara s'han de millorar) són:
 <ul>
   <li>Pincell</li>  
   <li>Línia</li>  
+  <li>Cercle</li>
+  <li>Rectangle</li>
+  <li>El·lipse</li>
   <li>Goma d'esborrar</li>
   <li>Netejar tot el canvas</li>  
   <li>Canvi de color</li>  
@@ -24,6 +27,9 @@ The tools that work for now (though they still need improvements) are:
 <ul>
   <li>Brush</li>  
   <li>Line</li>  
+  <li>Circle</li>
+  <li>Rectangle</li>
+  <li>Ellipse</li>
   <li>Eraser</li>
   <li>Clear the canvas</li>  
   <li>Change line color</li>  

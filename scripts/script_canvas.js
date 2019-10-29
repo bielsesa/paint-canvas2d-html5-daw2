@@ -13,6 +13,7 @@ window.addEventListener(
         'HTML5 Canvas no suportat.';
     }
 
+    /**************** INICIALITZACIÓ CANVAS ****************/
     // recull el canvas i el context del HTML
     let canvas = document.getElementById('area-dibuix');
     let ctx = canvas.getContext('2d');
@@ -53,25 +54,31 @@ window.addEventListener(
     tmpCtx.lineJoin = 'round';
     tmpCtx.lineCap = 'round';
 
+    /**************** INICIALITZACIÓ CANVAS ****************/
+
+    /**************** VARIABLES GLOBALS ****************/
+
     // variables que recullen les coordinades del ratolí
     let mouse = { x: 0, y: 0 };
     let startMouse = { x: 0, y: 0 };
     let puntsCursor = [];
 
-    // creació d'un element text area per afegir text (eina)
-    let areaText = document.createElement('textarea');
-    areaText.id = 'eina-text';
-    painting.appendChild(areaText);
+    // elements temporals per l'eina de text
+    let textarea = document.createElement('textarea');
+    textarea.id = 'text_tool';
+    textarea.style.display = 'none';
+    painting.appendChild(textarea);
 
-    areaText.addEventListener('mouseup', () => {
-      canvas.removeEventListener('mousemove', dibuixaText, false);
-    }, false);
-
-    // creació d'un element container per calcular les línies/caràcters
-    // del text afegit
     let tmpTxtCtn = document.createElement('div');
     tmpTxtCtn.style.display = 'none';
     painting.appendChild(tmpTxtCtn);
+
+    // event listener per l'eina de text
+    // quan s'aixeca el dit del botó del ratolí
+    // es deixa de fer gran la capsa de text
+    textarea.addEventListener('mouseup', (e) => {
+      canvas.removeEventListener('mousemove', onText, false);
+    });
 
     // variable global pel ratio per l'efecte de blur
     let ratioBlur = 2;
@@ -81,6 +88,8 @@ window.addEventListener(
 
     // opció fill per les formes geomètriques
     let fill = false;
+
+    /**************** VARIABLES GLOBALS ****************/
 
     /************ FUNCIONS GENERALS ************/
 
@@ -122,9 +131,14 @@ window.addEventListener(
       } else if (tool == 'rectangle') {
         canvas.addEventListener('mousemove', onPaintRect, false);
         onPaintRect();
+      } else if (tool == 'ellipse') {
+        canvas.addEventListener('mousemove', onPaintEllipse, false);
+        onPaintEllipse();
       } else if (tool == 'text') {
-        canvas.addEventListener('mousemove', dibuixaText, false);
-        dibuixaText();
+        obtenirPosicioCursorAmbStartMouse();
+        console.log(`startMouse.x: ${startMouse.x}, startMouse.y: ${startMouse.y}`);
+        canvas.addEventListener('mousemove', onText, false);
+        onText();
       } else if (tool == 'goma') {
         ctx.beginPath();
         ctx.moveTo(mouse.x, mouse.y);
@@ -162,10 +176,10 @@ window.addEventListener(
           canvas.removeEventListener('mousemove', onPaintCercle, false);
         } else if (tool == 'rectangle') {
           canvas.removeEventListener('mousemove', onPaintRect, false);
+        } else if (tool == 'ellipse') {
+          canvas.removeEventListener('mousemove', onPaintEllipse, false);        
         } else if (tool == 'text') {
-          canvas.removeEventListener('mousemove', dibuixaText, false);
-
-          let linies = areaText.value.split('\n');
+          let linies = textarea.value.split('\n');
           let liniesProcessades = [];
 
           for (let i = 0; i < linies.length; i++) {
@@ -186,7 +200,7 @@ window.addEventListener(
               tmpTxtCtn.style.visibility = '';
               tmpTxtCtn.style.display = 'none';
 
-              if (width > parseInt(areaText.style.width)) {
+              if (width > parseInt(textarea.style.width)) {
                 break;
               }
             }
@@ -195,20 +209,20 @@ window.addEventListener(
             tmpTxtCtn.innerHTML = '';
           }
 
-          let areaTextCompStyle = getComputedStyle(areaText);
-          let midaFont = areaTextCompStyle.getPropertyValue('font-size');
-          let tipoFont = areaTextCompStyle.getPropertyValue('font-family');
+          let textareaCompStyle = getComputedStyle(textarea);
+          let midaFont = textareaCompStyle.getPropertyValue('font-size');
+          let tipoFont = textareaCompStyle.getPropertyValue('font-family');
 
           tmpCtx.font = midaFont + ' ' + tipoFont;
           tmpCtx.textBaseline = 'top';
 
           for (let n = 0; n < liniesProcessades.length; n++) {
-            let liniaProcessada = liniesProcessades[i];
+            let liniaProcessada = liniesProcessades[n];
 
             tmpCtx.fillText(
               liniaProcessada,
-              parseInt(areaText.style.left),
-              parseInt(areaText.style.top) + n * parseInt(midaFont)
+              parseInt(textarea.style.left),
+              parseInt(textarea.style.top) + n * parseInt(midaFont)
             );
           }
         }
@@ -224,8 +238,8 @@ window.addEventListener(
         puntsCursor = [];
 
         // s'amaga el textarea per l'eina de text
-        areaText.style.display = 'none';
-        areaText.value = '';
+        textarea.style.display = 'none';
+        textarea.value = '';
       },
       false
     );
@@ -347,9 +361,38 @@ window.addEventListener(
       }
     };
 
+    // EL·LIPSE
+    let onPaintEllipse = () => {
+      // sempre es neteja el canvas temporal abans de dibuixar
+      // (per assegurar-nos que està net sempre)
+      tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+
+      tmpCtx.lineWidth = ctx.lineWidth;
+
+      let x = (mouse.x + startMouse.x) / 2;
+      let y = (mouse.y + startMouse.y) / 2;
+
+      let radi =
+        Math.max(
+          Math.abs(mouse.x - startMouse.x),
+          Math.abs(mouse.y - startMouse.y)
+        ) / 2;
+
+      tmpCtx.beginPath();
+      tmpCtx.ellipse(x, y, 50, radi, 0, 0, Math.PI * 2);
+      if (fill) {
+        tmpCtx.fillStyle = ctx.strokeStyle;
+        tmpCtx.fill();
+      } else {
+        tmpCtx.strokeStyle = ctx.strokeStyle;
+        tmpCtx.stroke();
+      }
+      tmpCtx.closePath();
+    };
+
     // TEXT
-    let dibuixaText = () => {
-      console.log('dibuixaText');
+    let onText = () => {
+      console.log('onText');
 
       tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
 
@@ -358,12 +401,14 @@ window.addEventListener(
       let width = Math.abs(mouse.x - startMouse.x);
       let height = Math.abs(mouse.y - startMouse.y);
 
-      areaText.style.left = x + 'px';
-      areaText.style.top = y + 'px';
-      areaText.style.width = width + 'px';
-      areaText.style.height = height + 'px';
+      console.log(`x: ${x}, y: ${y}, width: ${width}, height: ${height}`);
 
-      areaText.style.display = 'block';
+      textarea.style.left = x + 'px';
+      textarea.style.top = y + 'px';
+      textarea.style.width = width + 'px';
+      textarea.style.height = height + 'px';
+
+      textarea.style.display = 'block';
     };
 
     // GOMA D'ESBORRAR
@@ -543,6 +588,9 @@ window.addEventListener(
       .getElementById('btn-rectangle')
       .addEventListener('click', () => (tool = 'rectangle'), false);
     document
+      .getElementById('btn-ellipse')
+      .addEventListener('click', () => (tool = 'ellipse'), false);
+    document
       .getElementById('btn-text')
       .addEventListener('click', () => (tool = 'text'), false);
     document
@@ -557,16 +605,16 @@ window.addEventListener(
       .getElementById('mida-pincell')
       .addEventListener('change', canviaMidaPincell, false);
     document
-    .getElementById('opcio-fill')
-    .addEventListener('click', () => {
-      if (!fill) {
-        fill = true;
-        document.getElementById('opcio-fill').setAttribute('src', 'img/icon-radiobtn-marcat.png');
-      } else {
-        fill = false;
-        document.getElementById('opcio-fill').setAttribute('src', 'img/icon-radiobtn.png');
-      }
-    }, true);
+      .getElementById('opcio-fill')
+      .addEventListener('click', () => {
+        if (!fill) {
+          fill = true;
+          document.getElementById('opcio-fill').setAttribute('src', 'img/icon-radiobtn-marcat.png');
+        } else {
+          fill = false;
+          document.getElementById('opcio-fill').setAttribute('src', 'img/icon-radiobtn.png');
+        }
+      }, true);
 
     // accions
     document

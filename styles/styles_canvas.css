@@ -78,7 +78,8 @@
 }
 
 #btn-color-pick {
-    width: 30px;
+    width: 35px;
+    padding: 2px;
 }
 
 #opcions-eina-actual {

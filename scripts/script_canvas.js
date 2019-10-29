@@ -506,7 +506,7 @@ window.addEventListener(
 
       for (let i = 0; i < dades.length; i += 4) {
         let escalaG =
-          dades[i] * 0.99 + dades[i + 1] * 0.99 + dades[i + 2] * 0.99;
+          dades[i] * 0.34 + dades[i + 1] * 0.5 + dades[i + 2] * 0.16;
 
         dades[i] = escalaG;
         dades[i + 1] = escalaG;

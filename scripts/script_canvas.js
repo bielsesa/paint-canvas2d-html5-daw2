@@ -363,8 +363,6 @@ window.addEventListener(
 
     // EL·LIPSE
     let onPaintEllipse = () => {
-      // sempre es neteja el canvas temporal abans de dibuixar
-      // (per assegurar-nos que està net sempre)
       tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
 
       tmpCtx.lineWidth = ctx.lineWidth;
@@ -372,14 +370,11 @@ window.addEventListener(
       let x = (mouse.x + startMouse.x) / 2;
       let y = (mouse.y + startMouse.y) / 2;
 
-      let radi =
-        Math.max(
-          Math.abs(mouse.x - startMouse.x),
-          Math.abs(mouse.y - startMouse.y)
-        ) / 2;
+      let radiX = Math.abs(mouse.x - startMouse.x) / 2;
+      let radiY = Math.abs(mouse.y - startMouse.y) / 2;
 
       tmpCtx.beginPath();
-      tmpCtx.ellipse(x, y, 50, radi, 0, 0, Math.PI * 2);
+      tmpCtx.ellipse(x, y, radiX, radiY, 0, 0, Math.PI * 2);
       if (fill) {
         tmpCtx.fillStyle = ctx.strokeStyle;
         tmpCtx.fill();

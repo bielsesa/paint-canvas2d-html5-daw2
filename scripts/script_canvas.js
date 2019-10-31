@@ -67,15 +67,18 @@ window.addEventListener(
     let ratioBlur = 2;
 
     // l'eina per defecte és el pincell
-    let eina = "pincell";
+    let eina = (einaAnterior = "pincell");
     document.getElementById(`btn-${eina}`).style.backgroundColor = "#aef1c1";
-    let einaAnterior = "pincell";
 
     // opció fill per les formes geomètriques
     let fill = false;
 
     // variable que guarda els graus d'inclinació a l'hora de dibuixar
     let graus = 0;
+
+    // variables per la informació del text (tipus de font, mida)
+    let midaText = 12;
+    let fontFamily = "Montserrat";
 
     /**************** VARIABLES GLOBALS ****************/
 
@@ -138,7 +141,24 @@ window.addEventListener(
         canvas.addEventListener("mousemove", onPaintEllipse, false);
         onPaintEllipse();
       } else if (eina == "text") {
-        //TODO EINA DE TEXT
+        console.log(`${document.getElementById("text").value}`);
+        ctx.font = `${midaText}px ${fontFamily}`;
+        if (fill) {
+          ctx.fillStyle = ctx.strokeStyle;
+          ctx.fillText(
+            document.getElementById("text").value,
+            mouse.x,
+            mouse.y
+          );
+        } else {
+          ctx.lineWidth = 1;
+          ctx.strokeText(
+            document.getElementById("text").value,
+            mouse.x,
+            mouse.y
+          );
+          canviaMidaPincell();
+        }
       } else if (eina == "goma") {
         ctx.beginPath();
         ctx.moveTo(mouse.x, mouse.y);
@@ -179,7 +199,7 @@ window.addEventListener(
         } else if (eina == "ellipse") {
           canvas.removeEventListener("mousemove", onPaintEllipse, false);
         } else if (eina == "text") {
-          //TODO EINA TEXT
+          //canvas.removeEventListener('mousedown', onText, false);
         }
 
         // copia el canvas actual per si es vol desfer l'acció
@@ -301,12 +321,31 @@ window.addEventListener(
       let width = Math.abs(mouse.x - startMouse.x);
       let height = Math.abs(mouse.y - startMouse.y);
 
-      if (fill) {
-        tmpCtx.fillStyle = ctx.strokeStyle;
-        tmpCtx.fillRect(x, y, width, height);
+      // comprova si s'ha indicat un num de graus de rotació
+      if (graus != 0) {
+        // si és el cas, es canvia el punt d'origen del canvas
+        // al punt del
+        tmpCtx.save();
+        tmpCtx.translate((x + width) / 2, (y + height) / 2);
+        tmpCtx.rotate((graus * Math.PI) / 180);
+
+        if (fill) {
+          tmpCtx.fillStyle = ctx.strokeStyle;
+          tmpCtx.fillRect(0, 0, width, height);
+        } else {
+          tmpCtx.strokeStyle = ctx.strokeStyle;
+          tmpCtx.strokeRect(0, 0, width, height);
+        }
+
+        tmpCtx.restore();
       } else {
-        tmpCtx.strokeStyle = ctx.strokeStyle;
-        tmpCtx.strokeRect(x, y, width, height);
+        if (fill) {
+          tmpCtx.fillStyle = ctx.strokeStyle;
+          tmpCtx.fillRect(x, y, width, height);
+        } else {
+          tmpCtx.strokeStyle = ctx.strokeStyle;
+          tmpCtx.strokeRect(x, y, width, height);
+        }
       }
     };
 
@@ -336,9 +375,33 @@ window.addEventListener(
 
     // TEXT
     let onText = () => {
-      console.log("onText");
-      tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
-      //TODO EINA DE TEXT
+
+      // comprova si s'ha indicat un num de graus de rotació
+      if (graus != 0) {
+        // si és el cas, es canvia el punt d'origen del canvas
+        // al punt del
+        tmpCtx.save();
+        tmpCtx.translate((x + width) / 2, (y + height) / 2);
+        tmpCtx.rotate((graus * Math.PI) / 180);
+
+        if (fill) {
+          tmpCtx.fillStyle = ctx.strokeStyle;
+          tmpCtx.fillRect(0, 0, width, height);
+        } else {
+          tmpCtx.strokeStyle = ctx.strokeStyle;
+          tmpCtx.strokeRect(0, 0, width, height);
+        }
+
+        tmpCtx.restore();
+      } else {
+        if (fill) {
+          tmpCtx.fillStyle = ctx.strokeStyle;
+          tmpCtx.fillRect(x, y, width, height);
+        } else {
+          tmpCtx.strokeStyle = ctx.strokeStyle;
+          tmpCtx.strokeRect(x, y, width, height);
+        }
+      }
     };
 
     // GOMA D'ESBORRAR
@@ -528,6 +591,7 @@ window.addEventListener(
       },
       false
     );
+
     document.getElementById("btn-linia").addEventListener(
       "click",
       () => {
@@ -536,6 +600,7 @@ window.addEventListener(
       },
       false
     );
+
     document.getElementById("btn-cercle").addEventListener(
       "click",
       () => {
@@ -544,6 +609,7 @@ window.addEventListener(
       },
       false
     );
+
     document.getElementById("btn-rectangle").addEventListener(
       "click",
       () => {
@@ -552,6 +618,7 @@ window.addEventListener(
       },
       false
     );
+
     document.getElementById("btn-ellipse").addEventListener(
       "click",
       () => {
@@ -560,6 +627,7 @@ window.addEventListener(
       },
       false
     );
+
     document.getElementById("btn-text").addEventListener(
       "click",
       () => {
@@ -568,6 +636,7 @@ window.addEventListener(
       },
       false
     );
+
     document.getElementById("btn-goma").addEventListener(
       "click",
       () => {
@@ -581,9 +650,11 @@ window.addEventListener(
     document
       .getElementById("btn-color-pick")
       .addEventListener("change", canviaColor, false);
+
     document
       .getElementById("mida-pincell")
       .addEventListener("change", canviaMidaPincell, false);
+
     document.getElementById("opcio-fill").addEventListener(
       "click",
       () => {
@@ -602,35 +673,60 @@ window.addEventListener(
       true
     );
 
+    document
+      .getElementById("graus-inclinacio")
+      .addEventListener(
+        "change",
+        e =>
+          (graus = parseInt(document.getElementById("graus-inclinacio").value)),
+        false
+      );
+
+    document
+      .getElementById("mida-font")
+      .addEventListener(
+        "change",
+        e => (midaText = parseInt(document.getElementById("mida-font").value)),
+        false
+      );
+
+    document
+      .getElementById("tipo-font")
+      .addEventListener(
+        "change",
+        e => (fontFamily = document.getElementById("tipo-font").value),
+        false
+      );
+
     // accions
     document
       .getElementById("btn-desfer")
       .addEventListener("click", desferAccio, false);
+
     document
       .getElementById("a-descarrega")
       .addEventListener("click", guardarComImatge, false);
+
     document
       .getElementById("btn-neteja")
       .addEventListener("click", netejaCanvas, false);
+
     /*document
       .getElementById('btn-pujar-imatge')
       .addEventListener('change', pujarImatge, false);*/
+
     document
       .getElementById("btn-invertir")
       .addEventListener("click", invertirColors, false);
+
     document
       .getElementById("btn-grisos")
       .addEventListener("click", escalaGrisos, false);
+
     document
       .getElementById("btn-blur")
       .addEventListener("click", efecteBlur, false);
 
-    document.getElementById("graus-inclinacio").addEventListener(
-      "change",
-      e => (graus = parseInt(e.value)),
-
-      false
-    );
     /************ EVENT LISTENERS DELS BOTONS ************/
   },
   true

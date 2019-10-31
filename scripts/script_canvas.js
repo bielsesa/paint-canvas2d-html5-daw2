@@ -63,31 +63,19 @@ window.addEventListener(
     let startMouse = { x: 0, y: 0 };
     let puntsCursor = [];
 
-    // elements temporals per l'eina de text
-    let textarea = document.createElement("textarea");
-    textarea.id = "text_tool";
-    textarea.style.display = "none";
-    painting.appendChild(textarea);
-
-    let tmpTxtCtn = document.createElement("div");
-    tmpTxtCtn.style.display = "none";
-    painting.appendChild(tmpTxtCtn);
-
-    // event listener per l'eina de text
-    // quan s'aixeca el dit del botó del ratolí
-    // es deixa de fer gran la capsa de text
-    textarea.addEventListener("mouseup", e => {
-      canvas.removeEventListener("mousemove", onText, false);
-    });
-
     // variable global pel ratio per l'efecte de blur
     let ratioBlur = 2;
 
     // l'eina per defecte és el pincell
-    let tool = "pincell";
+    let eina = "pincell";
+    document.getElementById(`btn-${eina}`).style.backgroundColor = "#aef1c1";
+    let einaAnterior = "pincell";
 
     // opció fill per les formes geomètriques
     let fill = false;
+
+    // variable que guarda els graus d'inclinació a l'hora de dibuixar
+    let graus = 0;
 
     /**************** VARIABLES GLOBALS ****************/
 
@@ -117,31 +105,41 @@ window.addEventListener(
       document.getElementById("valor-mida-pincell").innerHTML = ctx.lineWidth;
     };
 
+    let canviaFonsEinaSeleccionada = () => {
+      console.log(
+        `canvia fons eina seleccionada, einaAnterior: ${einaAnterior} eina: ${eina}`
+      );
+
+      // primer treu el fons de l'eina seleccionada anteriorment
+      document.getElementById(`btn-${einaAnterior}`).style.backgroundColor =
+        "transparent";
+
+      // després posa el fons a l'eina actual
+      document.getElementById(`btn-${eina}`).style.backgroundColor = "#aef1c1";
+
+      einaAnterior = eina;
+    };
+
     let onPaint = () => {
       console.log("onPaint");
-      if (tool == "pincell") {
+      if (eina == "pincell") {
         canvas.addEventListener("mousemove", onPaintPincell, false);
         onPaintPincell();
-      } else if (tool == "linia") {
+      } else if (eina == "linia") {
         canvas.addEventListener("mousemove", onPaintLinia, false);
         onPaintLinia();
-      } else if (tool == "cercle") {
+      } else if (eina == "cercle") {
         canvas.addEventListener("mousemove", onPaintCercle, false);
         onPaintCercle();
-      } else if (tool == "rectangle") {
+      } else if (eina == "rectangle") {
         canvas.addEventListener("mousemove", onPaintRect, false);
         onPaintRect();
-      } else if (tool == "ellipse") {
+      } else if (eina == "ellipse") {
         canvas.addEventListener("mousemove", onPaintEllipse, false);
         onPaintEllipse();
-      } else if (tool == "text") {
-        obtenirPosicioCursorAmbStartMouse();
-        console.log(
-          `startMouse.x: ${startMouse.x}, startMouse.y: ${startMouse.y}`
-        );
-        canvas.addEventListener("mousemove", onText, false);
-        onText();
-      } else if (tool == "goma") {
+      } else if (eina == "text") {
+        //TODO EINA DE TEXT
+      } else if (eina == "goma") {
         ctx.beginPath();
         ctx.moveTo(mouse.x, mouse.y);
         onErase();
@@ -170,63 +168,18 @@ window.addEventListener(
     canvas.addEventListener(
       "mouseup",
       e => {
-        if (tool == "pincell") {
+        if (eina == "pincell") {
           canvas.removeEventListener("mousemove", onPaintPincell, false);
-        } else if (tool == "linia") {
+        } else if (eina == "linia") {
           canvas.removeEventListener("mousemove", onPaintLinia, false);
-        } else if (tool == "cercle") {
+        } else if (eina == "cercle") {
           canvas.removeEventListener("mousemove", onPaintCercle, false);
-        } else if (tool == "rectangle") {
+        } else if (eina == "rectangle") {
           canvas.removeEventListener("mousemove", onPaintRect, false);
-        } else if (tool == "ellipse") {
+        } else if (eina == "ellipse") {
           canvas.removeEventListener("mousemove", onPaintEllipse, false);
-        } else if (tool == "text") {
-          let linies = textarea.value.split("\n");
-          let liniesProcessades = [];
-
-          for (let i = 0; i < linies.length; i++) {
-            let caracters = linies[i].length;
-
-            for (let j = 0; j < caracters; j++) {
-              let nodeText = document.createTextNode(linies[i][j]);
-              tmpTxtCtn.appendChild(nodeText);
-
-              tmpTxtCtn.style.position = "absolute";
-              tmpTxtCtn.style.visibility = "hidden";
-              tmpTxtCtn.style.display = "block";
-
-              let width = tmpTxtCtn.offsetWidth;
-              let height = tmpTxtCtn.offsetHeight;
-
-              tmpTxtCtn.style.position = "";
-              tmpTxtCtn.style.visibility = "";
-              tmpTxtCtn.style.display = "none";
-
-              if (width > parseInt(textarea.style.width)) {
-                break;
-              }
-            }
-
-            liniesProcessades.push(tmpTxtCtn.textContent);
-            tmpTxtCtn.innerHTML = "";
-          }
-
-          let textareaCompStyle = getComputedStyle(textarea);
-          let midaFont = textareaCompStyle.getPropertyValue("font-size");
-          let tipoFont = textareaCompStyle.getPropertyValue("font-family");
-
-          tmpCtx.font = midaFont + " " + tipoFont;
-          tmpCtx.textBaseline = "top";
-
-          for (let n = 0; n < liniesProcessades.length; n++) {
-            let liniaProcessada = liniesProcessades[n];
-
-            tmpCtx.fillText(
-              liniaProcessada,
-              parseInt(textarea.style.left),
-              parseInt(textarea.style.top) + n * parseInt(midaFont)
-            );
-          }
+        } else if (eina == "text") {
+          //TODO EINA TEXT
         }
 
         // copia el canvas actual per si es vol desfer l'acció
@@ -238,10 +191,6 @@ window.addEventListener(
 
         // es retorna a 0 l'array de punts del cursor
         puntsCursor = [];
-
-        // s'amaga el textarea per l'eina de text
-        textarea.style.display = "none";
-        textarea.value = "";
       },
       false
     );
@@ -300,7 +249,6 @@ window.addEventListener(
       // finalment pinta la linia
 
       // sempre es neteja el canvas temporal abans de dibuixar
-      // (per assegurar-nos que està net sempre)
       tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
 
       tmpCtx.lineWidth = ctx.lineWidth;
@@ -316,7 +264,6 @@ window.addEventListener(
     // CERCLE
     let onPaintCercle = () => {
       // sempre es neteja el canvas temporal abans de dibuixar
-      // (per assegurar-nos que està net sempre)
       tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
 
       tmpCtx.lineWidth = ctx.lineWidth;
@@ -345,7 +292,6 @@ window.addEventListener(
     // RECTANGLE
     let onPaintRect = () => {
       // sempre es neteja el canvas temporal abans de dibuixar
-      // (per assegurar-nos que està net sempre)
       tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
 
       tmpCtx.lineWidth = ctx.lineWidth;
@@ -354,6 +300,7 @@ window.addEventListener(
       let y = Math.min(mouse.y, startMouse.y);
       let width = Math.abs(mouse.x - startMouse.x);
       let height = Math.abs(mouse.y - startMouse.y);
+
       if (fill) {
         tmpCtx.fillStyle = ctx.strokeStyle;
         tmpCtx.fillRect(x, y, width, height);
@@ -390,22 +337,8 @@ window.addEventListener(
     // TEXT
     let onText = () => {
       console.log("onText");
-
       tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
-
-      let x = Math.min(mouse.x, startMouse.x);
-      let y = Math.min(mouse.y, startMouse.y);
-      let width = Math.abs(mouse.x - startMouse.x);
-      let height = Math.abs(mouse.y - startMouse.y);
-
-      console.log(`x: ${x}, y: ${y}, width: ${width}, height: ${height}`);
-
-      textarea.style.left = x + "px";
-      textarea.style.top = y + "px";
-      textarea.style.width = width + "px";
-      textarea.style.height = height + "px";
-
-      textarea.style.display = "block";
+      //TODO EINA DE TEXT
     };
 
     // GOMA D'ESBORRAR
@@ -512,7 +445,7 @@ window.addEventListener(
         dades[i + 1] = escalaG;
         dades[i + 2] = escalaG;
       }
-      
+
       // se sobreescriu el canvas original
       ctx.putImageData(dadesDibuix, 0, 0);
     };
@@ -570,59 +503,79 @@ window.addEventListener(
       ctx.putImageData(dadesDibuix, 0, 0);
     };
 
+    let rotarClockWise = () => {
+      console.log("rota clockwise");
+      ctx.rotate((10 * Math.PI) / 180);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+    };
+
+    let rotarCounterClockWise = () => {
+      console.log("rota counterclockwise");
+      ctx.rotate((-10 * Math.PI) / 180);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+    };
+
     /************ FUNCIONS EINES ************/
 
     /************ EVENT LISTENERS DELS BOTONS ************/
 
     // eines
-    let eines = document.getElementsByClassName("eina");
-    let actualEina = (lastEina = eines[0]); // el brush és l'eina inicial per defecte
-    console.log(actualEina);
-
-    let selectEina = () => {
-      lastEina.classList.remove("eina-seleccionada");
-      actualEina.classList.add("eina-seleccionada");
-      lastEina = actualEina;
-      console.log("passo per classlist add");
-      console.log(actualEina);
-    };
-
-    for (element of eines) {
-      console.log(element);
-      element.addEventListener(
-        "click",
-        () => {
-          actualEina = element;
-          console.log(`canviat eina:`);
-          console.log(actualEina);
-        },
-        true
-      );
-      //element.addEventListener('click', selectEina, true);
-    }
-
-    document
-      .getElementById("btn-pincell")
-      .addEventListener("click", () => (tool = "pincell"), false);
-
-    document
-      .getElementById("btn-linia")
-      .addEventListener("click", () => (tool = "linia"), false);
-    document
-      .getElementById("btn-cercle")
-      .addEventListener("click", () => (tool = "cercle"), false);
-    document
-      .getElementById("btn-rectangle")
-      .addEventListener("click", () => (tool = "rectangle"), false);
-    document
-      .getElementById("btn-ellipse")
-      .addEventListener("click", () => (tool = "ellipse"), false);
-    document
-      .getElementById("btn-text")
-      .addEventListener("click", () => (tool = "text"), false);
-    document
-      .getElementById("btn-goma")
-      .addEventListener("click", () => (tool = "goma"), false);
+    document.getElementById("btn-pincell").addEventListener(
+      "click",
+      () => {
+        eina = "pincell";
+        canviaFonsEinaSeleccionada();
+      },
+      false
+    );
+    document.getElementById("btn-linia").addEventListener(
+      "click",
+      () => {
+        eina = "linia";
+        canviaFonsEinaSeleccionada();
+      },
+      false
+    );
+    document.getElementById("btn-cercle").addEventListener(
+      "click",
+      () => {
+        eina = "cercle";
+        canviaFonsEinaSeleccionada();
+      },
+      false
+    );
+    document.getElementById("btn-rectangle").addEventListener(
+      "click",
+      () => {
+        eina = "rectangle";
+        canviaFonsEinaSeleccionada();
+      },
+      false
+    );
+    document.getElementById("btn-ellipse").addEventListener(
+      "click",
+      () => {
+        eina = "ellipse";
+        canviaFonsEinaSeleccionada();
+      },
+      false
+    );
+    document.getElementById("btn-text").addEventListener(
+      "click",
+      () => {
+        eina = "text";
+        canviaFonsEinaSeleccionada();
+      },
+      false
+    );
+    document.getElementById("btn-goma").addEventListener(
+      "click",
+      () => {
+        eina = "goma";
+        canviaFonsEinaSeleccionada();
+      },
+      false
+    );
 
     // atributs eines
     document
@@ -671,6 +624,13 @@ window.addEventListener(
     document
       .getElementById("btn-blur")
       .addEventListener("click", efecteBlur, false);
+
+    document.getElementById("graus-inclinacio").addEventListener(
+      "change",
+      e => (graus = parseInt(e.value)),
+
+      false
+    );
     /************ EVENT LISTENERS DELS BOTONS ************/
   },
   true

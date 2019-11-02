@@ -129,3 +129,17 @@ textarea {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+input, select {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px #999;
+}
+
+#escala-x, #escala-y {
+    width: 3em;
+}
+
+#mida-pincell {
+    width: 10em;
+}

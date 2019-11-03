@@ -30,19 +30,6 @@
 
 /*url(img/icon-pincell.png), auto*/
 
-/*
-#tmp_canvas {
-    background: transparent;
-    border: solid orange 5px;
-    position: absolute;
-    left: 0px;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    cursor: crosshair; 
-}
-*/
-
 #aplicacio button {
     top: 15px;
     width: 80px;
@@ -70,7 +57,7 @@
 
 #eines {
     width: 35px;
-    height: 265px;
+    height: 295px;
 }
 
 #eines img, button {
@@ -96,8 +83,9 @@
 
 .icon {
     background: transparent;
-    border: 1px solid white;
     border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px #999;
 }
 
 .icon:hover {
@@ -142,4 +130,8 @@ input, select {
 
 #mida-pincell {
     width: 10em;
+}
+
+#btn-estrella {
+    width: 2em;
 }

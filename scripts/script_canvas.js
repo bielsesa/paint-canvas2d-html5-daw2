@@ -3,34 +3,34 @@
 // Curs 2019-20
 
 window.addEventListener(
-  "load",
+  'load',
   () => {
     // comprova si el navegador és compatible amb canvas
     try {
-      document.createElement("canvas").getContext("2d");
+      document.createElement('canvas').getContext('2d');
     } catch (e) {
-      document.getElementById("area-dibuix").innerHTML =
-        "HTML5 Canvas no suportat.";
+      document.getElementById('area-dibuix').innerHTML =
+        'HTML5 Canvas no suportat.';
     }
 
     /**************** INICIALITZACIÓ CANVAS ****************/
     // recull el canvas i el context del HTML
-    let canvas = document.getElementById("area-dibuix");
-    let ctx = canvas.getContext("2d");
+    let canvas = document.getElementById('area-dibuix');
+    let ctx = canvas.getContext('2d');
 
     // recull el div contenidor dels canvas per calcular la mida
     // dels canvas
     // getComputedStyle recull les característiques del div (alçada, amplada)
-    let painting = document.getElementById("paint");
+    let painting = document.getElementById('paint');
     let paintStyle = getComputedStyle(painting);
 
     // s'assignen els valors d'alçada i amplada
-    canvas.width = parseInt(paintStyle.getPropertyValue("width"));
-    canvas.height = parseInt(paintStyle.getPropertyValue("height"));
+    canvas.width = parseInt(paintStyle.getPropertyValue('width'));
+    canvas.height = parseInt(paintStyle.getPropertyValue('height'));
 
     // creació canvas temporal
-    let tmpCanvas = document.createElement("canvas");
-    let tmpCtx = tmpCanvas.getContext("2d");
+    let tmpCanvas = document.createElement('canvas');
+    let tmpCtx = tmpCanvas.getContext('2d');
     tmpCanvas.width = canvas.width;
     tmpCanvas.height = canvas.height;
     canvas.parentNode.insertBefore(tmpCanvas, canvas);
@@ -38,21 +38,21 @@ window.addEventListener(
     // variable per guardar una còpia del canvas
     // amb l'aspecte anterior a una acció nova
     // per l'acció de DESFER
-    let copiaCanvas = document.createElement("canvas");
-    let copiaCanvasCtx = copiaCanvas.getContext("2d");
+    let copiaCanvas = document.createElement('canvas');
+    let copiaCanvasCtx = copiaCanvas.getContext('2d');
     copiaCanvas.width = canvas.width;
     copiaCanvas.height = canvas.height;
 
     // valors per defecte pel tipus de traç (mida, color, etc)
-    ctx.strokeStyle = "#000";
+    ctx.strokeStyle = '#000';
     ctx.lineWidth = 3;
-    ctx.lineJoin = "round";
-    ctx.lineCap = "round";
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
 
-    tmpCtx.strokeStyle = "#000";
+    tmpCtx.strokeStyle = '#000';
     tmpCtx.lineWidth = 3;
-    tmpCtx.lineJoin = "round";
-    tmpCtx.lineCap = "round";
+    tmpCtx.lineJoin = 'round';
+    tmpCtx.lineCap = 'round';
 
     /**************** INICIALITZACIÓ CANVAS ****************/
 
@@ -67,8 +67,8 @@ window.addEventListener(
     let ratioBlur = 2;
 
     // l'eina per defecte és el pincell
-    let eina = (einaAnterior = "pincell");
-    document.getElementById(`btn-${eina}`).style.backgroundColor = "#aef1c1";
+    let eina = (einaAnterior = 'pincell');
+    document.getElementById(`btn-${eina}`).style.backgroundColor = '#aef1c1';
 
     // opció fill per les formes geomètriques
     let fill = false;
@@ -76,9 +76,16 @@ window.addEventListener(
     // variable que guarda els graus d'inclinació a l'hora de dibuixar
     let graus = 0;
 
+    // variables per l'escala de les formes
+    let escalaX = (escalaY = 1);
+
     // variables per la informació del text (tipus de font, mida)
     let midaText = 12;
-    let fontFamily = "Montserrat";
+    let fontFamily = 'Montserrat';
+
+    // imatge pel stamp de l'estrella
+    let imatgeEstrella = new Image();
+    imatgeEstrella.src = 'img/pattern-estrella.png';
 
     /**************** VARIABLES GLOBALS ****************/
 
@@ -100,12 +107,12 @@ window.addEventListener(
     };
 
     let canviaColor = () => {
-      ctx.strokeStyle = document.getElementById("btn-color-pick").value;
+      ctx.strokeStyle = document.getElementById('btn-color-pick').value;
     };
 
     let canviaMidaPincell = () => {
-      ctx.lineWidth = document.getElementById("mida-pincell").value;
-      document.getElementById("valor-mida-pincell").innerHTML = ctx.lineWidth;
+      ctx.lineWidth = document.getElementById('mida-pincell').value;
+      document.getElementById('valor-mida-pincell').innerHTML = ctx.lineWidth;
     };
 
     let canviaFonsEinaSeleccionada = () => {
@@ -115,51 +122,73 @@ window.addEventListener(
 
       // primer treu el fons de l'eina seleccionada anteriorment
       document.getElementById(`btn-${einaAnterior}`).style.backgroundColor =
-        "transparent";
+        'transparent';
 
       // després posa el fons a l'eina actual
-      document.getElementById(`btn-${eina}`).style.backgroundColor = "#aef1c1";
+      document.getElementById(`btn-${eina}`).style.backgroundColor = '#aef1c1';
 
       einaAnterior = eina;
     };
 
     let onPaint = () => {
-      console.log("onPaint");
-      if (eina == "pincell") {
-        canvas.addEventListener("mousemove", onPaintPincell, false);
+      console.log('onPaint');
+      if (eina == 'pincell') {
+        canvas.addEventListener('mousemove', onPaintPincell, false);
         onPaintPincell();
-      } else if (eina == "linia") {
-        canvas.addEventListener("mousemove", onPaintLinia, false);
+      } else if (eina == 'linia') {
+        canvas.addEventListener('mousemove', onPaintLinia, false);
         onPaintLinia();
-      } else if (eina == "cercle") {
-        canvas.addEventListener("mousemove", onPaintCercle, false);
+      } else if (eina == 'cercle') {
+        canvas.addEventListener('mousemove', onPaintCercle, false);
         onPaintCercle();
-      } else if (eina == "rectangle") {
-        canvas.addEventListener("mousemove", onPaintRect, false);
+      } else if (eina == 'rectangle') {
+        canvas.addEventListener('mousemove', onPaintRect, false);
         onPaintRect();
-      } else if (eina == "ellipse") {
-        canvas.addEventListener("mousemove", onPaintEllipse, false);
+      } else if (eina == 'ellipse') {
+        canvas.addEventListener('mousemove', onPaintEllipse, false);
         onPaintEllipse();
-      } else if (eina == "text") {
-        console.log(`${document.getElementById("text").value}`);
+      } else if (eina == 'estrella') {
+        // aplica l'escala que s'ha indicat
+        tmpCtx.scale(escalaX, escalaY);
+
+        // comprova si s'ha indicat un num de graus de rotació
+        if (graus != 0) {
+          // si és el cas, es canvia el punt d'origen del canvas
+          // al punt del
+          tmpCtx.save();
+          tmpCtx.translate(
+            mouse.x - imatgeEstrella.width / 2,
+            mouse.y - imatgeEstrella.height / 2
+          );
+          tmpCtx.rotate((graus * Math.PI) / 180);
+          tmpCtx.drawImage(imatgeEstrella, 0, 0);
+          tmpCtx.restore();
+        } else {
+          tmpCtx.drawImage(
+            imatgeEstrella,
+            mouse.x - imatgeEstrella.width / 2,
+            mouse.y - imatgeEstrella.height / 2
+          );
+        }
+
+        // retorna l'escala a la normalitat
+        tmpCtx.setTransform(1, 0, 0, 1, 0, 0);
+      } else if (eina == 'text') {
+        console.log(`${document.getElementById('text').value}`);
         ctx.font = `${midaText}px ${fontFamily}`;
         if (fill) {
           ctx.fillStyle = ctx.strokeStyle;
-          ctx.fillText(
-            document.getElementById("text").value,
-            mouse.x,
-            mouse.y
-          );
+          ctx.fillText(document.getElementById('text').value, mouse.x, mouse.y);
         } else {
           ctx.lineWidth = 1;
           ctx.strokeText(
-            document.getElementById("text").value,
+            document.getElementById('text').value,
             mouse.x,
             mouse.y
           );
           canviaMidaPincell();
         }
-      } else if (eina == "goma") {
+      } else if (eina == 'goma') {
         ctx.beginPath();
         ctx.moveTo(mouse.x, mouse.y);
         onErase();
@@ -171,11 +200,11 @@ window.addEventListener(
     /************ EVENT LISTENERS ************/
 
     // event listener per recollir les coordinades del cursor
-    canvas.addEventListener("mousemove", obtenirPosicioCursor, false);
+    canvas.addEventListener('mousemove', obtenirPosicioCursor, false);
 
     // event listener per començar a dibuixar
     canvas.addEventListener(
-      "mousedown",
+      'mousedown',
       e => {
         obtenirPosicioCursorAmbStartMouse();
         canviaColor(); // per assegurar-nos de que sempre té el color escollit al color-picker
@@ -186,19 +215,19 @@ window.addEventListener(
 
     // event listener per deixar de dibuixar
     canvas.addEventListener(
-      "mouseup",
+      'mouseup',
       e => {
-        if (eina == "pincell") {
-          canvas.removeEventListener("mousemove", onPaintPincell, false);
-        } else if (eina == "linia") {
-          canvas.removeEventListener("mousemove", onPaintLinia, false);
-        } else if (eina == "cercle") {
-          canvas.removeEventListener("mousemove", onPaintCercle, false);
-        } else if (eina == "rectangle") {
-          canvas.removeEventListener("mousemove", onPaintRect, false);
-        } else if (eina == "ellipse") {
-          canvas.removeEventListener("mousemove", onPaintEllipse, false);
-        } else if (eina == "text") {
+        if (eina == 'pincell') {
+          canvas.removeEventListener('mousemove', onPaintPincell, false);
+        } else if (eina == 'linia') {
+          canvas.removeEventListener('mousemove', onPaintLinia, false);
+        } else if (eina == 'cercle') {
+          canvas.removeEventListener('mousemove', onPaintCercle, false);
+        } else if (eina == 'rectangle') {
+          canvas.removeEventListener('mousemove', onPaintRect, false);
+        } else if (eina == 'ellipse') {
+          canvas.removeEventListener('mousemove', onPaintEllipse, false);
+        } else if (eina == 'text') {
           //canvas.removeEventListener('mousedown', onText, false);
         }
 
@@ -321,6 +350,9 @@ window.addEventListener(
       let width = Math.abs(mouse.x - startMouse.x);
       let height = Math.abs(mouse.y - startMouse.y);
 
+      // aplica l'escala que s'ha indicat
+      tmpCtx.scale(escalaX, escalaY);
+
       // comprova si s'ha indicat un num de graus de rotació
       if (graus != 0) {
         // si és el cas, es canvia el punt d'origen del canvas
@@ -347,6 +379,9 @@ window.addEventListener(
           tmpCtx.strokeRect(x, y, width, height);
         }
       }
+
+      // retorna l'escala a la normalitat
+      tmpCtx.setTransform(1, 0, 0, 1, 0, 0);
     };
 
     // EL·LIPSE
@@ -375,7 +410,6 @@ window.addEventListener(
 
     // TEXT
     let onText = () => {
-
       // comprova si s'ha indicat un num de graus de rotació
       if (graus != 0) {
         // si és el cas, es canvia el punt d'origen del canvas
@@ -406,24 +440,24 @@ window.addEventListener(
 
     // GOMA D'ESBORRAR
     let onErase = () => {
-      console.log("onErase");
+      console.log('onErase');
       console.log(`coords: ${mouse.x} , ${mouse.y}`);
 
       let esborra = () => {
-        ctx.globalCompositeOperation = "destination-out";
-        ctx.fillStyle = "rgba(0,0,0,1)";
-        ctx.strokeStyle = "rgba(0,0,0,1)";
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'rgba(0,0,0,1)';
+        ctx.strokeStyle = 'rgba(0,0,0,1)';
         ctx.lineTo(mouse.x, mouse.y);
         ctx.stroke();
       };
 
-      canvas.addEventListener("mousemove", esborra, false);
+      canvas.addEventListener('mousemove', esborra, false);
       canvas.addEventListener(
-        "mouseup",
+        'mouseup',
         () => {
-          canvas.removeEventListener("mousemove", esborra, false);
+          canvas.removeEventListener('mousemove', esborra, false);
           ctx.closePath();
-          ctx.globalCompositeOperation = "source-over";
+          ctx.globalCompositeOperation = 'source-over';
         },
         false
       );
@@ -431,7 +465,7 @@ window.addEventListener(
 
     // DESFER L'ÚLTIMA ACCIÓ
     let desferAccio = () => {
-      console.log("Entra a desfer");
+      console.log('Entra a desfer');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(copiaCanvas, 0, 0);
     };
@@ -445,11 +479,11 @@ window.addEventListener(
     // GUARDAR CANVAS COM A IMATGE
     // ****** es podria preguntar el nom de l'arxiu amb un prompt
     let guardarComImatge = () => {
-      document.getElementById("a-descarrega").download = "imatge.png";
-      document.getElementById("a-descarrega").href = document
-        .getElementById("area-dibuix")
-        .toDataURL("image/png")
-        .replace("/^data:image/[^;]/", "data:application/octet-stream");
+      document.getElementById('a-descarrega').download = 'imatge.png';
+      document.getElementById('a-descarrega').href = document
+        .getElementById('area-dibuix')
+        .toDataURL('image/png')
+        .replace('/^data:image/[^;]/', 'data:application/octet-stream');
     };
 
     // PUJAR IMATGE D'ARXIU
@@ -567,13 +601,13 @@ window.addEventListener(
     };
 
     let rotarClockWise = () => {
-      console.log("rota clockwise");
+      console.log('rota clockwise');
       ctx.rotate((10 * Math.PI) / 180);
       ctx.setTransform(1, 0, 0, 1, 0, 0);
     };
 
     let rotarCounterClockWise = () => {
-      console.log("rota counterclockwise");
+      console.log('rota counterclockwise');
       ctx.rotate((-10 * Math.PI) / 180);
       ctx.setTransform(1, 0, 0, 1, 0, 0);
     };
@@ -583,64 +617,73 @@ window.addEventListener(
     /************ EVENT LISTENERS DELS BOTONS ************/
 
     // eines
-    document.getElementById("btn-pincell").addEventListener(
-      "click",
+    document.getElementById('btn-pincell').addEventListener(
+      'click',
       () => {
-        eina = "pincell";
+        eina = 'pincell';
         canviaFonsEinaSeleccionada();
       },
       false
     );
 
-    document.getElementById("btn-linia").addEventListener(
-      "click",
+    document.getElementById('btn-linia').addEventListener(
+      'click',
       () => {
-        eina = "linia";
+        eina = 'linia';
         canviaFonsEinaSeleccionada();
       },
       false
     );
 
-    document.getElementById("btn-cercle").addEventListener(
-      "click",
+    document.getElementById('btn-cercle').addEventListener(
+      'click',
       () => {
-        eina = "cercle";
+        eina = 'cercle';
         canviaFonsEinaSeleccionada();
       },
       false
     );
 
-    document.getElementById("btn-rectangle").addEventListener(
-      "click",
+    document.getElementById('btn-rectangle').addEventListener(
+      'click',
       () => {
-        eina = "rectangle";
+        eina = 'rectangle';
         canviaFonsEinaSeleccionada();
       },
       false
     );
 
-    document.getElementById("btn-ellipse").addEventListener(
-      "click",
+    document.getElementById('btn-ellipse').addEventListener(
+      'click',
       () => {
-        eina = "ellipse";
+        eina = 'ellipse';
         canviaFonsEinaSeleccionada();
       },
       false
     );
 
-    document.getElementById("btn-text").addEventListener(
-      "click",
+    document.getElementById('btn-estrella').addEventListener(
+      'click',
       () => {
-        eina = "text";
+        eina = 'estrella';
         canviaFonsEinaSeleccionada();
       },
       false
     );
 
-    document.getElementById("btn-goma").addEventListener(
-      "click",
+    document.getElementById('btn-text').addEventListener(
+      'click',
       () => {
-        eina = "goma";
+        eina = 'text';
+        canviaFonsEinaSeleccionada();
+      },
+      false
+    );
+
+    document.getElementById('btn-goma').addEventListener(
+      'click',
+      () => {
+        eina = 'goma';
         canviaFonsEinaSeleccionada();
       },
       false
@@ -648,84 +691,102 @@ window.addEventListener(
 
     // atributs eines
     document
-      .getElementById("btn-color-pick")
-      .addEventListener("change", canviaColor, false);
+      .getElementById('btn-color-pick')
+      .addEventListener('change', canviaColor, false);
 
     document
-      .getElementById("mida-pincell")
-      .addEventListener("change", canviaMidaPincell, false);
+      .getElementById('mida-pincell')
+      .addEventListener('change', canviaMidaPincell, false);
 
-    document.getElementById("opcio-fill").addEventListener(
-      "click",
+    document.getElementById('opcio-fill').addEventListener(
+      'click',
       () => {
         if (!fill) {
           fill = true;
           document
-            .getElementById("opcio-fill")
-            .setAttribute("src", "img/icon-radiobtn-marcat.png");
+            .getElementById('opcio-fill')
+            .setAttribute('src', 'img/icon-radiobtn-marcat.png');
         } else {
           fill = false;
           document
-            .getElementById("opcio-fill")
-            .setAttribute("src", "img/icon-radiobtn.png");
+            .getElementById('opcio-fill')
+            .setAttribute('src', 'img/icon-radiobtn.png');
         }
       },
       true
     );
 
     document
-      .getElementById("graus-inclinacio")
+      .getElementById('graus-inclinacio')
       .addEventListener(
-        "change",
+        'change',
         e =>
-          (graus = parseInt(document.getElementById("graus-inclinacio").value)),
+          (graus = parseInt(document.getElementById('graus-inclinacio').value)),
+        false
+      );
+
+    document.getElementById('escala-x').addEventListener(
+      'change',
+      e => {
+        escalaX = parseInt(document.getElementById('escala-x').value);
+        console.log(`canvi escala x: ${escalaX}`);
+      },
+      false
+    );
+
+    document.getElementById('escala-y').addEventListener(
+      'change',
+      e => {
+        escalaX = parseInt(document.getElementById('escala-y').value);
+        console.log(`canvi escala y ${escalaY}`);
+      },
+      false
+    );
+
+    document
+      .getElementById('mida-font')
+      .addEventListener(
+        'change',
+        e => (midaText = parseInt(document.getElementById('mida-font').value)),
         false
       );
 
     document
-      .getElementById("mida-font")
+      .getElementById('tipo-font')
       .addEventListener(
-        "change",
-        e => (midaText = parseInt(document.getElementById("mida-font").value)),
-        false
-      );
-
-    document
-      .getElementById("tipo-font")
-      .addEventListener(
-        "change",
-        e => (fontFamily = document.getElementById("tipo-font").value),
+        'change',
+        e => (fontFamily = document.getElementById('tipo-font').value),
         false
       );
 
     // accions
     document
-      .getElementById("btn-desfer")
-      .addEventListener("click", desferAccio, false);
+      .getElementById('btn-desfer')
+      .addEventListener('click', desferAccio, false);
 
     document
-      .getElementById("a-descarrega")
-      .addEventListener("click", guardarComImatge, false);
+      .getElementById('a-descarrega')
+      .addEventListener('click', guardarComImatge, false);
 
     document
-      .getElementById("btn-neteja")
-      .addEventListener("click", netejaCanvas, false);
+      .getElementById('btn-neteja')
+      .addEventListener('click', netejaCanvas, false);
 
     /*document
       .getElementById('btn-pujar-imatge')
       .addEventListener('change', pujarImatge, false);*/
 
     document
-      .getElementById("btn-invertir")
-      .addEventListener("click", invertirColors, false);
+      .getElementById('btn-invertir')
+      .addEventListener('click', invertirColors, false);
 
     document
-      .getElementById("btn-grisos")
-      .addEventListener("click", escalaGrisos, false);
+      .getElementById('btn-grisos')
+      .addEventListener('click', escalaGrisos, false);
 
     document
-      .getElementById("btn-blur")
-      .addEventListener("click", efecteBlur, false);
+      .getElementById('btn-blur')
+      .addEventListener('click', efecteBlur, false);
 
     /************ EVENT LISTENERS DELS BOTONS ************/
   },

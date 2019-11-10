@@ -712,6 +712,7 @@ window.addEventListener(
       () => {
         ctx.fillStyle = patternHex;
         tmpCtx.fillStyle = patternHex;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
       },
       false
     );
@@ -721,6 +722,7 @@ window.addEventListener(
       () => {
         ctx.fillStyle = patternStriped;
         tmpCtx.fillStyle = patternStriped;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
       },
       false
     );

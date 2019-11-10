@@ -1,3 +1,50 @@
+/******************* TAG SELECTORS *******************/
+
+textarea {
+    padding: 10px;
+    line-height: 1.5;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px #999;
+    resize: vertical;
+    width: 125px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+input, select {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px #999;
+}
+
+/******************* CLASS SELECTORS *******************/
+
+.caixa-eines-canvas {
+    background: #f7eaea;
+    border: solid 1px black;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 5px;
+}
+
+.icon {
+    background: transparent;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px #999;
+}
+
+.icon:hover {
+    border: 2px solid black;
+}
+
+.icon:active {
+    border: 3px solid white;
+}
+
+/******************* IDENTIFIER SELECTORS *******************/
+
 #contingut-grid {
     display: grid;
     grid-template-columns: auto 3fr;
@@ -35,14 +82,6 @@
     width: 80px;
 }
 
-.caixa-eines-canvas {
-    background: #f7eaea;
-    border: solid 1px black;
-    border-radius: 10px;
-    margin: 10px;
-    padding: 5px;
-}
-
 #accions {
     grid-column: 1 / span 3;
     grid-row: 1 / span 1;
@@ -57,7 +96,7 @@
 
 #eines {
     width: 35px;
-    height: 295px;
+    height: 355px;
 }
 
 #eines img, button {
@@ -81,21 +120,6 @@
     margin: 5px;
 }
 
-.icon {
-    background: transparent;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-shadow: 1px 1px 1px #999;
-}
-
-.icon:hover {
-    border: 2px solid black;
-}
-
-.icon:active {
-    border: 3px solid white;
-}
-
 #eina-text {
     position: absolute;
     border: 1px dashed black;
@@ -104,24 +128,6 @@
     font: 10px 'Lato';
     overflow: hidden;
     white-space: nowrap;
-}
-
-textarea {
-    padding: 10px;
-    line-height: 1.5;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-shadow: 1px 1px 1px #999;
-    resize: vertical;
-    width: 125px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-input, select {
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-shadow: 1px 1px 1px #999;
 }
 
 #escala-x, #escala-y {

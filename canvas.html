@@ -12,20 +12,22 @@
 <body>
     <div class="wrapper">
         <div id="contingut-grid">
-
             <header id="capcelera">
                 <h1>Aplicació Paint amb Canvas 2D</h1>
                 <h3>Projecte de HTML5 de DAW2</h3>
             </header>
 
+            <!-- MENÚ DE NAVEGACIÓ -->
             <nav id="menu">
                 <a id="nav-home" href="index.html">Pàgina principal</a>
                 <a id="nav-canvas" href="canvas.html">Paint</a>
             </nav>
 
+            <!-- CANVAS -->
             <div id="aplicacio">
+                <!-- BARRA D'ACCIONS (SUPERIOR) -->
                 <div id="accions" class="caixa-eines-canvas">
-                    <img class="icon" src="img/icon-desfer.png" id="btn-desfer">
+                    <img class="icon" src="img/icon-desfer.png" id="btn-desfer" />
                     <img class="icon" src="img/icon-neteja.png" id="btn-neteja" />
                     <a href="#" id="a-descarrega">
                         <img class="icon" src="img/icon-guardar.png" id="btn-guardar" />
@@ -35,6 +37,7 @@
                     <button class="icon" id="btn-grisos">Grisos</button>
                     <button class="icon" id="btn-blur">Blur</button>
                 </div>
+                <!-- BARRA D'EINES (ESQUERRA) -->
                 <div id="eines" class="caixa-eines-canvas">
                     <img class="icon eina" src="img/icon-pincell.png" id="btn-pincell" />
                     <img class="icon eina" src="img/icon-linia.png" id="btn-linia" />
@@ -45,32 +48,37 @@
                     <img class="icon eina" src="img/icon-text.png" id="btn-text" />
                     <img class="icon eina" src="img/icon-goma.png" id="btn-goma" />
                     <input class="icon" type="color" id="btn-color-pick" placeholder="#000" />
+                    <img class="icon eina" src="img/icon-pattern-hex.png" id="btn-pattern-hex" />
+                    <img class="icon eina" src="img/icon-pattern-striped.png" id="btn-pattern-striped" />
+
                 </div>
+
+                <!-- ÀREA DE DIBUIX (CENTRE) -->
                 <div id="paint">
                     <canvas id="area-dibuix"></canvas>
                 </div>
+
+                <!-- BARRA D'ATRIBUTS D'EINA (DRETA) -->
                 <div id="opcions-eina-actual">
                     <div id="atributs-punts" class="caixa-eines-canvas">
                         Mida línia: <span id="valor-mida-pincell">3</span>
-                        <input type="range" id="mida-pincell" min="1" max="100" value="3" width="80px" /><br>
-                        <img id="opcio-fill" src="img/icon-radiobtn.png"> Fill <br>
-                        Inclinació:  
+                        <input type="range" id="mida-pincell" min="1" max="100" value="3" width="80px" /><br />
+                        <img id="opcio-fill" src="img/icon-radiobtn.png" /> Fill <br />
+                        Inclinació:
                         <select id="graus-inclinacio">
                             <option value="0" selected>Cap</option>
                             <option value="45">45º</option>
                             <option value="90">90º</option>
                             <option value="135">135º</option>
                             <option value="315">315º</option>
-                        </select><br> 
-                        Escala:                         
-                        <input type="number" id="escala-x" min="-50" max="50" value="1">
-                        <input type="number" id="escala-y" min="-50" max="50" value="1">
+                        </select><br />
+                        Escala:
+                        <input type="number" id="escala-x" min="-50" max="50" value="1" />
+                        <input type="number" id="escala-y" min="-50" max="50" value="1" />
                     </div>
                     <div id="atributs-text" class="caixa-eines-canvas">
                         Text:
-                        <textarea id="text" rows=3 cols="15" placeholder="Insereix el teu text..." maxlength="180">
-
-                        </textarea><br>
+                        <textarea id="text" rows="3" cols="15" placeholder="Insereix el teu text..." maxlength="180"></textarea><br />
                         Mida lletra:
                         <select id="mida-font">
                             <option value="10">10</option>
@@ -78,15 +86,16 @@
                             <option value="16">16</option>
                             <option value="18">18</option>
                             <option value="22">22</option>
-                        </select><br>
+                        </select><br />
                         Tipografia:
                         <select id="tipo-font">
-                            <!-- posar spans per canviar la font-family de cada? -->
                             <option value="Lato" style="font-family: 'Lato', sans-serif;">Lato</option>
-                            <option value="Montserrat" selected style="font-family: 'Montserrat', sans-serif;">Montserrat</option>
+                            <option value="Montserrat" selected style="font-family: 'Montserrat', sans-serif;">
+                                Montserrat</option>
                             <option value="Nunito" style="font-family: 'Nunito', sans-serif;">Nunito</option>
-                            <option value="Times New Roman" style="font-family: 'Times New Roman', Times, serif;">Times New Roman</option>
-                        </select><br>
+                            <option value="Times New Roman" style="font-family: 'Times New Roman', Times, serif;">Times
+                                New Roman</option>
+                        </select><br />
                     </div>
                 </div>
             </div>

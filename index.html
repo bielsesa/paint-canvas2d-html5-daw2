@@ -1,88 +1,121 @@
 <!DOCTYPE html>
+<html>
 
 <head>
-    <meta charset="utf-8">
-    <title>Aplicació Paint - Index</title>
-    <link rel="stylesheet" href="styles/styles_general.css">
-    <link rel="stylesheet" href="styles/styles_index.css">
-    <script src="scripts/script_index.js"></script>
+  <meta charset="utf-8" />
+  <title>Aplicació Paint - Index</title>
+  <link rel="stylesheet" href="styles/styles_general.css" />
+  <link rel="stylesheet" href="styles/styles_index.css" />
+  <script src="scripts/script_index.js"></script>
 </head>
 
 <body>
+  <div class="wrapper">
+    <header id="capcelera">
+      <h1>Aplicació Paint amb Canvas 2D</h1>
+      <h3>Projecte de HTML5 de DAW2</h3>
+    </header>
 
-    <div class="wrapper">
-        <header id="capcelera">
-            <h1>Aplicació Paint amb Canvas 2D</h1>
-            <h3>Projecte de HTML5 de DAW2</h4>
-        </header>
+    <div id="contingut-grid">
+      <nav id="menu">
+        <a id="nav-home" href="index.html">Pàgina principal</a>
+        <a id="nav-canvas" href="canvas.html">Paint</a>
+      </nav>
 
-        <div id="contingut-grid">
-            <nav id="menu">
-                <a id="nav-home" href="index.html">Pàgina principal</a>
-                <a id="nav-canvas" href="canvas.html">Paint</a>
-            </nav>
+      <div id="informacio">
+        <h4>Hola!</h4>
+        <p>
+          Aquesta pàgina web és un projecte del curs de Desenvolupament
+          d'Aplicacions Web de l'Escola de Jesuïtes El Clot.<br />
+          Conté una petita aplicació que representa una mena de Paint,
+          directament al teu navegador web! Encara no està complerta i té
+          bastants bugs &#x1F41E;, però ja es pot probar una mica. Aquí poso
+          la llista d'eines que tenim planejat implementar, i també l'estat de
+          la seva implementació:
+        </p>
+        <ul>
+          <li>Pincell <img class="semafor" src="img/icon-verd.png" /></li>
+          <li>Línia recta <img class="semafor" src="img/icon-verd.png" /></li>
+          <li>Cercle <img class="semafor" src="img/icon-verd.png" /></li>
+          <li>Rectangle <img class="semafor" src="img/icon-verd.png" /></li>
+          <li>El·lipse <img class="semafor" src="img/icon-verd.png" /></li>
+          <li>Text <img class="semafor" src="img/icon-verd.png" /></li>
+          <li>
+            Canviar el color del traç
+            <img class="semafor" src="img/icon-verd.png" />
+          </li>
+          <li>
+            Canviar la mida del traç
+            <img class="semafor" src="img/icon-verd.png" />
+          </li>
+          <li>
+            Guardar com arxiu PNG
+            <img class="semafor" src="img/icon-verd.png" />
+          </li>
+          <li>
+            Goma d'esborrar <img class="semafor" src="img/icon-verd.png" />
+          </li>
+          <li>
+            Netejar tota l'àrea de dibuix
+            <img class="semafor" src="img/icon-verd.png" />
+          </li>
+          <li>
+            Efectes aplicables a la imatge
+            <ul>
+              <li>
+                Invertir colors
+                <img class="semafor" src="img/icon-verd.png" />
+              </li>
+              <li>Grisos <img class="semafor" src="img/icon-verd.png" /></li>
+              <li>Blur <img class="semafor" src="img/icon-verd.png" /></li>
+            </ul>
+          </li>
+        </ul>
+        <p>
+          Patterns utilitzats:<br />
+          <a href="https://www.freepik.com/free-photos-vectors/background">Hexagon pattern created by eightonesix - www.freepik.com</a><br />
+          <a href="https://www.freepik.com/free-photos-vectors/background">Striped hexagon pattern created by vilmosvarga - www.freepik.com</a><br />
+        </p>
+      </div>
 
-            <div id="informacio">
-                <h4>Hola!</h4>
-                <p>
-                    Aquesta pàgina web és un projecte del curs de Desenvolupament d'Aplicacions Web de l'Escola de
-                    Jesuïtes
-                    El Clot.<br>
-                    Conté una petita aplicació que representa una mena de Paint, directament al teu navegador web!
-                    Encara no està complerta i té bastants bugs &#x1F41E;, però ja es pot probar una mica.
-                    Aquí poso la llista d'eines que tenim planejat implementar, i també l'estat de la seva
-                    implementació:
-                </p>
-                <ul>
-                    <li>Pincell <img class="semafor" src="img/icon-verd.png"></li>
-                    <li>Línia recta <img class="semafor" src="img/icon-verd.png"></li>
-                    <li>Cercle <img class="semafor" src="img/icon-verd.png"></li>
-                    <li>Rectangle <img class="semafor" src="img/icon-verd.png"></li>
-                    <li>El·lipse <img class="semafor" src="img/icon-verd.png"></li>
-                    <li>Text <img class="semafor" src="img/icon-verd.png"></li>
-                    <li>Canviar el color del traç <img class="semafor" src="img/icon-verd.png"></li>
-                    <li>Canviar la mida del traç <img class="semafor" src="img/icon-verd.png"></li>
-                    <li>Guardar com arxiu PNG <img class="semafor" src="img/icon-verd.png"></li>
-                    <li>Goma d'esborrar <img class="semafor" src="img/icon-verd.png"></li>
-                    <li>Netejar tota l'àrea de dibuix <img class="semafor" src="img/icon-verd.png"></li>
-                    <li>Efectes aplicables a la imatge
-                        <ul>
-                            <li>Invertir colors <img class="semafor" src="img/icon-verd.png"></li>
-                            <li>Grisos <img class="semafor" src="img/icon-verd.png"></li>
-                            <li>Blur <img class="semafor" src="img/icon-verd.png"></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-
-            <div id="item-video-grid">
-                <div id="contenidor-video">
-                    <video id="video" width="640" height="365" poster="img/thumbnail-video.png">
-                        <source src="videos/hello_world.mp4" type="video/mp4">
-                        <source src="videos/hello_world.mp4" type="video/webm">
-                        <p>
-                            El teu navegador no suporta vídeo HTML5.
-                            Pots <a href="videos/hello_world.mp4">descarregar-lo</a> si vols!
-                        </p>
-                    </video>
-                    <div id="controls-video">
-                        <button type="button" id="play-pause"><img src="img/play-button.png"></button>
-                        <input type="range" id="seek-bar" value="0">
-                        <button type="button" id="mute"><img src="img/volume-button.png"></button>
-                        <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">
-                        <button type="button" id="full-screen"><img src="img/full-button.png"></button>
-                    </div>
-                </div>
-                <p>Crèdits: <a href="https://www.youtube.com/channel/UCdkkQvJoB0kGgYHCYwSkdww">Louie Zong</a> (té animacions i cançons molt guais!!)</p>
-            </div>
+      <div id="item-video-grid">
+        <div id="contenidor-video">
+          <video id="video" width="640" height="365" poster="img/thumbnail-video.png">
+            <source src="videos/hello_world.mp4" type="video/mp4" />
+            <source src="videos/hello_world.mp4" type="video/webm" />
+            <p>
+              El teu navegador no suporta vídeo HTML5. Pots
+              <a href="videos/hello_world.mp4">descarregar-lo</a> si vols!
+            </p>
+          </video>
+          <div id="controls-video">
+            <button type="button" id="play-pause">
+              <img src="img/play-button.png" />
+            </button>
+            <input type="range" id="seek-bar" value="0" />
+            <button type="button" id="mute">
+              <img src="img/volume-button.png" />
+            </button>
+            <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1" />
+            <button type="button" id="full-screen">
+              <img src="img/full-button.png" />
+            </button>
+          </div>
         </div>
+        <p>
+          Crèdits:
+          <a href="https://www.youtube.com/channel/UCdkkQvJoB0kGgYHCYwSkdww">Louie Zong</a>
+          (té animacions i cançons molt guais!!)
+        </p>
+      </div>
     </div>
+  </div>
 
-    <footer id="peu" class="sticky-footer">
-        <div class="center">
-            <p>Biel Serrano Sánchez, Escola Jesuïtes El Clot DAW2, 2019</p>
-        </div>
-    </footer>
+  <footer id="peu" class="sticky-footer">
+    <div class="center">
+      <p>Biel Serrano Sánchez, Escola Jesuïtes El Clot DAW2, 2019</p>
+    </div>
+  </footer>
 </body>
 
 </html>

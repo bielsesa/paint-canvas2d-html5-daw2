@@ -87,6 +87,20 @@ window.addEventListener(
     let imatgeEstrella = new Image();
     imatgeEstrella.src = 'img/pattern-estrella.png';
 
+    // imatges pels patterns
+    let imatgePatternHex = new Image();
+    let patternHex;
+    imatgePatternHex.src = 'img/pattern-hex.jpg';
+    imatgePatternHex.onload = () => {
+      patternHex = ctx.createPattern(imatgePatternHex, 'repeat');
+    };
+    let imatgePatternStriped = new Image();
+    let patternStriped;
+    imatgePatternStriped.src = 'img/pattern-striped.jpg';
+    imatgePatternStriped.onload = () => {
+      patternStriped = ctx.createPattern(imatgePatternStriped, 'repeat');
+    };
+
     /**************** VARIABLES GLOBALS ****************/
 
     /************ FUNCIONS GENERALS ************/
@@ -108,6 +122,7 @@ window.addEventListener(
 
     let canviaColor = () => {
       ctx.strokeStyle = document.getElementById('btn-color-pick').value;
+      ctx.fillStyle = document.getElementById('btn-color-pick').value;
     };
 
     let canviaMidaPincell = () => {
@@ -176,17 +191,47 @@ window.addEventListener(
       } else if (eina == 'text') {
         console.log(`${document.getElementById('text').value}`);
         ctx.font = `${midaText}px ${fontFamily}`;
-        if (fill) {
-          ctx.fillStyle = ctx.strokeStyle;
-          ctx.fillText(document.getElementById('text').value, mouse.x, mouse.y);
+
+        // comprova si s'ha d'aplicar alguna rotació al text
+        console.log(graus);
+        if (graus != 0) {
+          console.log('Texto con rotate');
+
+          ctx.save();
+          ctx.translate(mouse.x, mouse.y);
+          ctx.rotate((graus * Math.PI) / 180);
+          if (fill) {
+            ctx.fillText(
+              document.getElementById('text').value,
+              -mouse.x,
+              -mouse.y
+            );
+          } else {
+            ctx.lineWidth = 1;
+            ctx.strokeText(
+              document.getElementById('text').value,
+              mouse.x,
+              mouse.y
+            );
+            canviaMidaPincell();
+          }
+          ctx.restore();
         } else {
-          ctx.lineWidth = 1;
-          ctx.strokeText(
-            document.getElementById('text').value,
-            mouse.x,
-            mouse.y
-          );
-          canviaMidaPincell();
+          if (fill) {
+            ctx.fillText(
+              document.getElementById('text').value,
+              mouse.x,
+              mouse.y
+            );
+          } else {
+            ctx.lineWidth = 1;
+            ctx.strokeText(
+              document.getElementById('text').value,
+              mouse.x,
+              mouse.y
+            );
+            canviaMidaPincell();
+          }
         }
       } else if (eina == 'goma') {
         ctx.beginPath();
@@ -207,7 +252,8 @@ window.addEventListener(
       'mousedown',
       e => {
         obtenirPosicioCursorAmbStartMouse();
-        canviaColor(); // per assegurar-nos de que sempre té el color escollit al color-picker
+        //canviaColor(); // per assegurar-nos de que sempre té el color escollit al color-picker
+        console.log(`FillStyle: ${ctx.fillStyle}`);
         onPaint();
       },
       false
@@ -227,8 +273,6 @@ window.addEventListener(
           canvas.removeEventListener('mousemove', onPaintRect, false);
         } else if (eina == 'ellipse') {
           canvas.removeEventListener('mousemove', onPaintEllipse, false);
-        } else if (eina == 'text') {
-          //canvas.removeEventListener('mousedown', onText, false);
         }
 
         // copia el canvas actual per si es vol desfer l'acció
@@ -252,7 +296,7 @@ window.addEventListener(
     let onPaintPincell = () => {
       puntsCursor.push({
         x: mouse.x,
-        y: mouse.y
+        y: mouse.y,
       });
 
       if (puntsCursor.length < 3) {
@@ -408,36 +452,6 @@ window.addEventListener(
       tmpCtx.closePath();
     };
 
-    // TEXT
-    let onText = () => {
-      // comprova si s'ha indicat un num de graus de rotació
-      if (graus != 0) {
-        // si és el cas, es canvia el punt d'origen del canvas
-        // al punt del
-        tmpCtx.save();
-        tmpCtx.translate((x + width) / 2, (y + height) / 2);
-        tmpCtx.rotate((graus * Math.PI) / 180);
-
-        if (fill) {
-          tmpCtx.fillStyle = ctx.strokeStyle;
-          tmpCtx.fillRect(0, 0, width, height);
-        } else {
-          tmpCtx.strokeStyle = ctx.strokeStyle;
-          tmpCtx.strokeRect(0, 0, width, height);
-        }
-
-        tmpCtx.restore();
-      } else {
-        if (fill) {
-          tmpCtx.fillStyle = ctx.strokeStyle;
-          tmpCtx.fillRect(x, y, width, height);
-        } else {
-          tmpCtx.strokeStyle = ctx.strokeStyle;
-          tmpCtx.strokeRect(x, y, width, height);
-        }
-      }
-    };
-
     // GOMA D'ESBORRAR
     let onErase = () => {
       console.log('onErase');
@@ -572,7 +586,7 @@ window.addEventListener(
             i + 4, // pixels de la meitat
             i + tempW - 4,
             i + tempW,
-            i + tempW + 4 // pixels d'abaix
+            i + tempW + 4, // pixels d'abaix
           ];
 
           // calcula la suma dels valors de tots els pixels propers
@@ -689,10 +703,29 @@ window.addEventListener(
       false
     );
 
-    // atributs eines
     document
       .getElementById('btn-color-pick')
       .addEventListener('change', canviaColor, false);
+
+    document.getElementById('btn-pattern-hex').addEventListener(
+      'click',
+      () => {
+        ctx.fillStyle = patternHex;
+        tmpCtx.fillStyle = patternHex;
+      },
+      false
+    );
+
+    document.getElementById('btn-pattern-striped').addEventListener(
+      'click',
+      () => {
+        ctx.fillStyle = patternStriped;
+        tmpCtx.fillStyle = patternStriped;
+      },
+      false
+    );
+
+    // atributs eines
 
     document
       .getElementById('mida-pincell')

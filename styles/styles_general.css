@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Lato|Montserrat|Nunito&display=swap');
 
+/******************* TAG SELECTORS *******************/
+
 * {
     background: #f1d4d4;
     margin: 0;
@@ -11,6 +13,24 @@ body {
 html, body {
     height: 100%;
 }
+
+h1 {
+    color: #484c7f;
+    margin: 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 3em;
+    font-weight: 800;
+    text-align: center;
+}
+
+h3 {
+    color: #2c2f4e;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    text-align: center;
+}
+
+/******************* CLASS SELECTORS *******************/
 
 .wrapper {
     min-height: 100%;
@@ -31,6 +51,22 @@ html, body {
     color: #715a7a;
     text-align: center;
 }
+
+.center {
+    height: 50px;
+    position: relative;  
+}
+
+.center p {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+/******************* IDENTIFIER SELECTORS *******************/
 
 #capcelera {
     grid-column: 1 / span 2;
@@ -63,34 +99,4 @@ html, body {
 
 #menu a:active {
     color: #b599c2;
-}
-
-h1 {
-    color: #484c7f;
-    margin: 10px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 3em;
-    font-weight: 800;
-    text-align: center;
-}
-
-h3 {
-    color: #2c2f4e;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: bold;
-    text-align: center;
-}
-
-.center {
-    height: 50px;
-    position: relative;  
-}
-
-.center p {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
 }
